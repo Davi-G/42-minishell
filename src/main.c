@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/01/15 14:38:37 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/02/09 18:09:12 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int main(int ac, char **av, char **env)
 			out = readline(str);
 		else
 			out = readline("minishell->$ ");
+		parser(out);
 	}
 	return (0);
 }

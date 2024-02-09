@@ -1,41 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/09 18:12:39 by davi-g            #+#    #+#             */
-/*   Updated: 2024/02/09 20:04:06 by davi-g           ###   ########.fr       */
+/*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
+/*   Updated: 2024/02/09 18:22:03 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_strcmp(char *str1, char *str2)
+void	parser(char *str)
 {
-	int	i;
-
-	i = 0;
-	while (str1[i] == str2[i])
+	(void)str;
+	t_data	data;
+	
+	data.splited = NULL;
+	data.splited = ft_split(str, ' ');
+	while (*data.splited)
 	{
-		if (str1[i] && str2[i])
-			return (0);
-		i++;
+		printf("%s\n", *data.splited);
+		data.splited++;
 	}
-	return (str1[i] - str2[i]);
-}
-
-int	is_numeric(char *argv)
-{
-	int	i;
-
-	i = 0;
-	while (argv[i])
-	{
-		if (argv[i] < '0' || argv[i] > '9')
-			return (1);
-		i++;
-	}
-	return (0);
 }
