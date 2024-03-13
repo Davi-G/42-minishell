@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/02/09 18:38:42 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:58:56 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,24 @@
 /*----<Structures>----*/
 typedef struct s_data
 {
-	/* data */
-	char	**splited;
+	char *toke1;
+	char *toke2;
+	char *toke3;
 }	t_data;
+
+typedef struct s_master
+{
+	int	exit_status;
+}	t_master;
 
 
 /*----<Functions>----*/
-void	parser(char *str);
+t_data	parser(char *str);
+int		exe_existing_command(t_data *info, t_master *minishell);
+int		echo_cmd(char *argv);
+int		exit_cmd(char	*command, t_master *minishell);
+int		ft_strcmp(char *str1, char *str2);
+int		is_numeric(char *argv);
+void	free_array(char **array);
 
 #endif
