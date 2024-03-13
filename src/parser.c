@@ -6,22 +6,29 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/02/09 18:22:03 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:48:24 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	parser(char *str)
+t_data	parser(char *str)
 {
-	(void)str;
+	char **split;
 	t_data	data;
 	
-	data.splited = NULL;
-	data.splited = ft_split(str, ' ');
-	while (*data.splited)
+	split = NULL;
+	data.toke1 = NULL;
+	data.toke2 = NULL;
+	data.toke3 = NULL;
+	split = ft_split(str, ' ');
+	data.toke1 = split[0];
+	data.toke2 = split[1];
+	data.toke3 = split[2];	
+/* 	while (*split)
 	{
-		printf("%s\n", *data.splited);
-		data.splited++;
-	}
+		printf("%s\n", *split);
+		split++;
+	} */
+	return (data);
 }

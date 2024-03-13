@@ -9,6 +9,7 @@ SRCS_DIR = ./src/
 SRCS = main.c \
 		parser.c \
 		utils.c \
+		command_finder.c \
 
 OBJS_DIR = ./obj/
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
