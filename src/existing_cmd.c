@@ -33,7 +33,6 @@ int	pwd_cmd(void)
 	return (0);
 }
 
-
 int	exit_cmd(char	**command)
 {
 	if (command[0] && command[1] && command[2])
@@ -107,6 +106,7 @@ int env_cmd(t_mini *info_shell)
 		ft_putendl_fd(info_shell->envp[i++], 1);
 	return 0;
 }
+
 /*
 int	cd_cmd(t_mini *info_shell, char** command)
 {
