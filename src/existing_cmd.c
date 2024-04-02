@@ -1,5 +1,5 @@
 #include "minishell.h"
-
+/* 
 int	echo_cmd(char **argv)
 {
 	int	n_boolean;
@@ -32,10 +32,10 @@ int	pwd_cmd(void)
 	ft_putstr(cwd);
 	return (0);
 }
-
-int	exit_cmd(char	**command)
+ */
+int	exit_cmd(char	*command, t_master *minishell)
 {
-	if (command[0] && command[1] && command[2])
+	/* if (command[0] && command[1] && command[2])
 	{
 		ft_putstr("exit\n");
 		ft_putstr("minishell: exit: too many arguments\n");
@@ -54,10 +54,12 @@ int	exit_cmd(char	**command)
 			return(ft_atoi(command[1]));
 		else
 			return (0);
-	}
-	//minishell->exit = 1;
+	} */
+	(void)command;
+	minishell->exit_status = 1;
+	return 0;
 }
-
+/* 
 char **delete_envp_single_var(char **str, const char *var) {
     int i;
 	int j;
@@ -82,8 +84,8 @@ void delete_envp_vars(char **str, char **vars)
     while (vars[i])
         str = delete_envp_single_var(str, vars[i++]);
 }
-
-void unset_cmd(t_mini *info_shell, char *var)
+ */
+/* void unset_cmd(t_mini *info_shell, char *var)
 {
     char **vars;
 	
@@ -95,9 +97,9 @@ void unset_cmd(t_mini *info_shell, char *var)
     }
     delete_envp_vars(info_shell->envp, vars);
     free_array(vars);
-}
+} */
 
-int env_cmd(t_mini *info_shell)
+/* int env_cmd(t_mini *info_shell)
 {
 	int i;
 	
@@ -105,7 +107,7 @@ int env_cmd(t_mini *info_shell)
 	while (info_shell->envp[i])
 		ft_putendl_fd(info_shell->envp[i++], 1);
 	return 0;
-}
+} */
 
 /*
 int	cd_cmd(t_mini *info_shell, char** command)
