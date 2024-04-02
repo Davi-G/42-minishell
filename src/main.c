@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/03/13 17:48:45 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/02 20:48:03 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,10 @@ int main(int ac, char **av, char **env)
 	
 	control.exit_status = 0;
 	out = 0;
-	while(control.exit_status == 0)
+	while(control.exit_status != 1)
 	{
 		out = readline("minishell->$ ");
 		info = parser(out);
-		printf("toke1: %s\n", info.toke1);
 		exe_existing_command(&info, &control);
 	}
 	return (0);
