@@ -1,7 +1,30 @@
 #include "minishell.h"
-/* 
-int	echo_cmd(char **argv)
+
+int	echo_cmd(t_data *info)
 {
+	int	n_boolean;
+	int	i;
+	
+	n_boolean = 0;
+	i = 1;
+	if (ft_strcmp(info->toke2, "-n") == 0)
+	{
+		n_boolean = 1;
+		i++;
+	}
+	/* while (info->toke2[i])
+	{ */
+		ft_putstr(info->toke2);
+		ft_putstr("\n");
+	/* 	if (info->toke2[i + 1])
+			write (1, " ", 1);
+		i++;
+	} */
+	if (n_boolean != 1 && i != 1)
+		write (1, "\n", 1);
+	return (0);
+}
+/* {
 	int	n_boolean;
 	int	i;
 	
@@ -22,7 +45,7 @@ int	echo_cmd(char **argv)
 	if (n_boolean != 1 && i != 1)
 		write (1, "\n", 1);
 	return (0);
-}
+} */
 
 int	pwd_cmd(void)
 {
@@ -30,9 +53,10 @@ int	pwd_cmd(void)
 
 	cwd = getcwd(0, 0);
 	ft_putstr(cwd);
+	ft_putstr("\n");
 	return (0);
 }
- */
+
 int	exit_cmd(char	*command, t_master *minishell)
 {
 	/* if (command[0] && command[1] && command[2])
@@ -59,6 +83,7 @@ int	exit_cmd(char	*command, t_master *minishell)
 	minishell->exit_status = 1;
 	return 0;
 }
+
 /* 
 char **delete_envp_single_var(char **str, const char *var) {
     int i;
@@ -84,8 +109,8 @@ void delete_envp_vars(char **str, char **vars)
     while (vars[i])
         str = delete_envp_single_var(str, vars[i++]);
 }
- */
-/* void unset_cmd(t_mini *info_shell, char *var)
+
+void unset_cmd(t_mini *info_shell, char *var)
 {
     char **vars;
 	
@@ -97,9 +122,9 @@ void delete_envp_vars(char **str, char **vars)
     }
     delete_envp_vars(info_shell->envp, vars);
     free_array(vars);
-} */
+}
 
-/* int env_cmd(t_mini *info_shell)
+int env_cmd(t_mini *info_shell)
 {
 	int i;
 	
@@ -107,9 +132,8 @@ void delete_envp_vars(char **str, char **vars)
 	while (info_shell->envp[i])
 		ft_putendl_fd(info_shell->envp[i++], 1);
 	return 0;
-} */
+}
 
-/*
 int	cd_cmd(t_mini *info_shell, char** command)
 {
 	int	i;

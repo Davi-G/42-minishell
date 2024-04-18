@@ -19,10 +19,10 @@
 
 int	exe_existing_command(t_data *info, t_master *minishell)
 {
-//	if (ft_strcmp(info->toke1, "echo") == 0)
-//		return (echo_cmd(info));
-//	if (ft_strcmp(info->toke1, "pwd") == 0)
-//		return (pwd_cmd());
+	if (ft_strcmp(info->toke1, "echo") == 0)
+		return (echo_cmd(info));
+	else if (ft_strcmp(info->toke1, "pwd") == 0)
+		return (pwd_cmd());
 //	if (ft_strcmp(info->toke1, "cd") == 0)
 //		return (cd_cmd(info));
 //	if (ft_strcmp(info->toke1, "export") == 0)
@@ -31,7 +31,13 @@ int	exe_existing_command(t_data *info, t_master *minishell)
 //		unset_cmd();
 //	if (ft_strcmp(info->toke1, "env") == 0)
 //		env_cmd();
-	if (ft_strcmp(info->toke1, "exit") == 0)
+	else if (ft_strcmp(info->toke1, "exit") == 0)
 		exit_cmd(info->toke1, minishell);
+	else
+	{
+		//ft_putstr("minishell: ");
+		ft_putstr(info->toke1);
+		ft_putstr(": command not found\n");
+	}
 	return 0;
 }
