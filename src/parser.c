@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/02 20:48:20 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/19 00:43:44 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ t_data	parser(char *str)
 	data.toke1 = split[0];
 	data.toke2 = split[1];
 	data.toke3 = split[2];	
-/* 	while (*split)
+	/* while (*split)
 	{
 		printf("%s\n", *split);
 		split++;
 	} */
+	printf("%s\n", data.toke2);
 	return (data);
 }

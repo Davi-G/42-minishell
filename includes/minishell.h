@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/03/13 17:58:56 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/19 00:14:44 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,12 @@ typedef struct s_master
 /*----<Functions>----*/
 t_data	parser(char *str);
 int		exe_existing_command(t_data *info, t_master *minishell);
-int		echo_cmd(char *argv);
+int		echo_cmd(t_data *info);
 int		exit_cmd(char	*command, t_master *minishell);
 int		ft_strcmp(char *str1, char *str2);
 int		is_numeric(char *argv);
 void	free_array(char **array);
+int		pwd_cmd(void);
+void	ft_putstr(char *s);
 
-#endif
+#endif 

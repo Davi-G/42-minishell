@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:12:39 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/02 20:47:06 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/19 00:14:35 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,15 @@ void	free_array(char **array)
 		i++;
 	}
 	free(array);
+}
+
+void	ft_putstr(char *s)
+{
+	int	i;
+
+	if (!s)
+		return ;
+	i = 0;
+	while (s[i])
+		write(1, &s[i++], 1);
 }
