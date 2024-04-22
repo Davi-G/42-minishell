@@ -11,7 +11,6 @@ int	echo_cmd(t_data *info)
 		n_boolean = 1;
 	if (!info->toke3)
 		return (1);
-	printf("n_boolean: %d\n", n_boolean);
 	while (info->toke3[i])
 	{
 		ft_putstr(info->toke3[i]);
