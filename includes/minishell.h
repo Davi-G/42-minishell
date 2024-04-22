@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/19 00:14:44 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/22 13:38:00 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_data
 {
 	char *toke1;
 	char *toke2;
-	char *toke3;
+	char **toke3;
 }	t_data;
 
 typedef struct s_master
@@ -53,5 +53,6 @@ int		is_numeric(char *argv);
 void	free_array(char **array);
 int		pwd_cmd(void);
 void	ft_putstr(char *s);
+int ft_strlen_array(char **array);
 
 #endif 

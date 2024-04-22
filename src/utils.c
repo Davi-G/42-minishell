@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:12:39 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/19 00:14:35 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/22 14:12:27 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_strcmp(char *str1, char *str2)
 	int	i;
 
 	i = 0;
+	if (!str1 || !str2)
+		return (1);
 	while (str1[i] && str2[i])
 	{
 		if (str1[i] != str2[i])
@@ -62,4 +64,14 @@ void	ft_putstr(char *s)
 	i = 0;
 	while (s[i])
 		write(1, &s[i++], 1);
+}
+
+int ft_strlen_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+		i++;
+	return (i);
 }

@@ -5,22 +5,21 @@ int	echo_cmd(t_data *info)
 	int	n_boolean;
 	int	i;
 	
+	i = 0;
 	n_boolean = 0;
-	i = 1;
+	//(void)n_boolean;
 	if (ft_strcmp(info->toke2, "-n") == 0)
-	{
 		n_boolean = 1;
-		i++;
-	}
-	/* while (info->toke2[i])
-	{ */
-		ft_putstr(info->toke2);
-		ft_putstr("\n");
-	/* 	if (info->toke2[i + 1])
+	if (!info->toke3)
+		return (1);
+	while (info->toke3[i])
+	{
+		ft_putstr(info->toke3[i]);
+		if (info->toke3[i + 1])
 			write (1, " ", 1);
 		i++;
-	} */
-	if (n_boolean != 1 && i != 1)
+	}
+	if (n_boolean != 1 || i != 1)
 		write (1, "\n", 1);
 	return (0);
 }
