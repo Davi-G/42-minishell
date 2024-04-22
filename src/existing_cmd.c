@@ -7,11 +7,11 @@ int	echo_cmd(t_data *info)
 	
 	i = 0;
 	n_boolean = 0;
-	//(void)n_boolean;
 	if (ft_strcmp(info->toke2, "-n") == 0)
 		n_boolean = 1;
 	if (!info->toke3)
 		return (1);
+	printf("n_boolean: %d\n", n_boolean);
 	while (info->toke3[i])
 	{
 		ft_putstr(info->toke3[i]);
@@ -19,8 +19,9 @@ int	echo_cmd(t_data *info)
 			write (1, " ", 1);
 		i++;
 	}
-	if (n_boolean != 1 || i != 1)
-		write (1, "\n", 1);
+	if (n_boolean == 1)
+		write (1, "%", 1);
+	write (1, "\n", 1);
 	return (0);
 }
 /* {
