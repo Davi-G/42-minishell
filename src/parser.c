@@ -6,7 +6,7 @@
 /*   By: sergisan <sergisan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/23 15:47:43 by sergisan         ###   ########.fr       */
+/*   Updated: 2024/04/23 18:03:16 by sergisan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@ t_data	parser(char *str)
 			j++;
 		}
 	}
-	i = 0;
-	while (data.toke3[i])
+	return (data);
+}
+
+/*	i = 0;
+ 	while (data.toke3[i])
 	{
 		printf("toke3 en posicion de i %i : %s\n", i, data.toke3[i]);
 		i++;
-	}
-	return (data);
-}
+	} */

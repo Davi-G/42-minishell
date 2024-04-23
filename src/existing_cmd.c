@@ -75,7 +75,7 @@ int	exit_cmd(t_data	*command, t_master *minishell)
 		minishell->exit_status = 1;
 		return (0);
 	}
-	if (command->toke1 && command->toke3[0] && command->toke3[1])
+	else if (command->toke1 && command->toke3[0] && command->toke3[1])
 	{
 		ft_putstr("minishell: exit: too many arguments\n");
 		return (1);
@@ -168,14 +168,11 @@ int	try_prev_dir(char *full_route)
 
 int	cd_cmd(t_master *info_shell, t_data *command)
 {
-	int	i;
-
-	i = 0;
 /* 	printf("old_pwd: %s\n", info_shell->old_pwd);
 	printf("toke1 %s\n", command->toke1);
 	printf("toke2 %s\n", command->toke2); */
 	if (!command->toke3 && !command->toke2)
-		chdir("/Users/sergisan");
+		chdir(getenv("HOME"));
 	else if (command->toke3[1])
 	{
 		ft_putstr("minishell: cd: too many arguments\n");
