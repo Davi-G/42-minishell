@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/22 14:00:36 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/23 11:37:04 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int main(int ac, char **av, char **env)
 	{
 		out = readline("minishell->$ ");
 		info = parser(out);
+		control.old_pwd = getcwd(0, 0);
 		exe_existing_command(&info, &control);
 	}
 	return (0);
