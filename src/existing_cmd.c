@@ -56,30 +56,29 @@ int	pwd_cmd(void)
 	return (0);
 }
 
-int	exit_cmd(char	*command, t_master *minishell)
+int	exit_cmd(t_data	*command, t_master *minishell)
 {
-	/* if (command[0] && command[1] && command[2])
+	if (!command->toke3)
 	{
-		ft_putstr("exit\n");
+		minishell->exit_status = 1;
+		return (0);
+	}
+	if (command->toke1 && command->toke3[0] && command->toke3[1])
+	{
 		ft_putstr("minishell: exit: too many arguments\n");
 		return (1);
 	}
-	else if (command[0] && command[1] && isnumeric(command[1]) == 1)
+	else if (command->toke1 && command->toke3[0] && is_numeric(command->toke3[0]) == 1)
 	{
-		ft_putstr("exit\n");
+		//comprobar si es necesario que sea numerico o es valido com palabras
 		ft_putstr("minishell: exit: numeric argument required\n");
 		return (255);
 	}
-	else
+	else if (command->toke3[0])
 	{
-		ft_putstr("exit\n");
-		if (command[1])
-			return(ft_atoi(command[1]));
-		else
-			return (0);
-	} */
-	(void)command;
-	minishell->exit_status = 1;
+		minishell->exit_status = 1;
+		return(ft_atoi(command->toke3[0]));
+	}
 	return 0;
 }
 
@@ -132,15 +131,17 @@ int env_cmd(t_mini *info_shell)
 		ft_putendl_fd(info_shell->envp[i++], 1);
 	return 0;
 }
+*/
 
-int	cd_cmd(t_mini *info_shell, char** command)
+int	cd_cmd(t_master *info_shell, t_data *command)
 {
 	int	i;
 
 	i = 0;
-	while (command[i])
-		i++;
-	if (i > 1)
+	//printf("old_pwd: %s\n", info_shell->old_pwd);
+	if (!command->toke3)
+		chdir("");
+	else if (command->toke3[1])
 	{
 		ft_putstr("minishell: cd: too many arguments\n");
 		return (1);
@@ -148,11 +149,11 @@ int	cd_cmd(t_mini *info_shell, char** command)
 	else if (i == 1)
 	{
 		//Arreglar aqui?¿?¿?¿?¿?¿
-		info_shell->oldpwd = getcwd(0, 0);
-		chdir("");
+		info_shell->old_pwd = getcwd(0, 0);
 	}
+	return 0;
 }
 
-cd
+/* cd
 export
-*/
+ */
