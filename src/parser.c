@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sergisan <sergisan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/22 14:21:33 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/23 18:03:16 by sergisan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 t_data	parser(char *str)
 {
-	char **split;
-	int i;
-	int j;
+	char	**split;
+	int		i;
+	int		j;
 	t_data	data;
-	
-	split = NULL;
+
 	data.toke1 = NULL;
 	data.toke2 = NULL;
 	data.toke3 = NULL;
@@ -44,8 +43,10 @@ t_data	parser(char *str)
 	}
 	return (data);
 }
-	/* while (*split)
+
+/*	i = 0;
+ 	while (data.toke3[i])
 	{
-		printf("%s\n", *split);
-		split++;
+		printf("toke3 en posicion de i %i : %s\n", i, data.toke3[i]);
+		i++;
 	} */
