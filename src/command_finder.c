@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   command_finder.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sergisan <sergisan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/23 14:52:45 by sergisan          #+#    #+#             */
+/*   Updated: 2024/04/23 15:53:58 by sergisan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* int	exist_command(char *command)
@@ -39,5 +51,5 @@ int	exe_existing_command(t_data *info, t_master *minishell)
 		ft_putstr(info->toke1);
 		ft_putstr(": command not found\n");
 	}
-	return 0;
+	return (0);
 }

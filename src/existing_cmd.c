@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   existing_cmd.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sergisan <sergisan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/23 14:52:35 by sergisan          #+#    #+#             */
+/*   Updated: 2024/04/23 14:52:35 by sergisan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	echo_cmd(t_data *info)
 {
 	int	n_boolean;
 	int	i;
-	
+
 	i = 0;
 	n_boolean = 0;
 	if (ft_strcmp(info->toke2, "-n") == 0)
@@ -77,9 +89,9 @@ int	exit_cmd(t_data	*command, t_master *minishell)
 	else if (command->toke3[0])
 	{
 		minishell->exit_status = 1;
-		return(ft_atoi(command->toke3[0]));
+		return (ft_atoi(command->toke3[0]));
 	}
-	return 0;
+	return (0);
 }
 
 /* 
@@ -133,27 +145,58 @@ int env_cmd(t_mini *info_shell)
 }
 */
 
+int	try_prev_dir(char *full_route)
+{
+	char	*final_route;
+	int		i;
+
+	i = ft_strlen(full_route);
+	while (full_route[i] != '/')
+		i--;
+	i++;
+	final_route = ft_calloc(i, sizeof(char));
+	ft_strlcpy(final_route, full_route, i);
+	if (chdir(final_route) == -1)
+		return (1);
+	return (0);
+}
+
+/* int	try_change_dir()
+{
+
+} */
+
 int	cd_cmd(t_master *info_shell, t_data *command)
 {
 	int	i;
 
 	i = 0;
-	//printf("old_pwd: %s\n", info_shell->old_pwd);
-	if (!command->toke3)
-		chdir("");
+/* 	printf("old_pwd: %s\n", info_shell->old_pwd);
+	printf("toke1 %s\n", command->toke1);
+	printf("toke2 %s\n", command->toke2); */
+	if (!command->toke3 && !command->toke2)
+		chdir("/Users/sergisan");
 	else if (command->toke3[1])
 	{
 		ft_putstr("minishell: cd: too many arguments\n");
 		return (1);
 	}
-	else if (i == 1)
+	else if (command->toke2 && ft_strcmp(command->toke2, "-") == 0)
 	{
-		//Arreglar aqui?¿?¿?¿?¿?¿
-		info_shell->old_pwd = getcwd(0, 0);
+		if (chdir(info_shell->old_pwd) == -1)
+		{
+			ft_putstr("minishell: cd: OLDPWD not set\n");
+			return (1);
+		}
+		ft_putstr(info_shell->old_pwd);
 	}
-	return 0;
+	else if (command->toke3[0][0] == '.' && command->toke3[0][1] == '.')
+		return (try_prev_dir(getcwd(0, 0)));
+/* 	else
+		try_change_dir(getcwd(0, 0), command->toke3[0]); */
+	return (0);
 }
 
-/* cd
+/*
 export
  */

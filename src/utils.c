@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sergisan <sergisan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:12:39 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/23 12:50:04 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/23 15:22:11 by sergisan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_strcmp(char *str1, char *str2)
 		return (1);
 	while (str1[i] && str2[i])
 	{
-		if (str1[i] != str2[i])
+		if (str1[i] != str2[i] || ft_strlen(str1) != ft_strlen(str2))
 			return (1);
 		i++;
 	}
@@ -57,7 +57,7 @@ void	free_array(char **array)
 
 void	ft_putstr(char *s)
 {
-	//incluir opciop para quitar comillas
+	//incluir opcion para quitar comillas
 	int	i;
 
 	if (!s)
@@ -67,7 +67,7 @@ void	ft_putstr(char *s)
 		write(1, &s[i++], 1);
 }
 
-int ft_strlen_array(char **array)
+int	ft_strlen_array(char **array)
 {
 	int	i;
 
