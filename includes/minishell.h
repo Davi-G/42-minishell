@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 14:34:48 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/25 16:34:27 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,14 @@
 # include <readline/history.h>
 # include <sys/ioctl.h>
 
+/*----<Colors>----*/
+# define RESET		"\e[0m"
+# define YELLOW		"\e[33m"
+# define RED		"\e[31m"
+# define GREEN		"\e[32m"
+# define MAGENTA	"\x1B[35m"
+# define CYAN		"\x1B[36m"
+
 /*----<Structures>----*/
 typedef struct s_data
 {
@@ -45,7 +53,6 @@ typedef struct s_master
 	char	*old_pwd;
 	char	*new_pwd;
 }	t_master;
-
 
 /*----<Functions>----*/
 t_data	parser(char *str);
