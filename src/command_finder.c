@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 14:52:45 by sergisan          #+#    #+#             */
-/*   Updated: 2024/04/25 13:07:50 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/25 14:34:35 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,17 @@ int	exe_existing_command(t_data *info, t_master *minishell, char **env)
 		return (pwd_cmd());
 	else if (ft_strcmp(info->toke1, "cd") == 0)
 		return (cd_cmd(minishell, info));
-	else if (ft_strcmp(info->toke1, "export") == 0)
-		export_cmd(info, env);
 	else if (ft_strcmp(info->toke1, "env") == 0)
 		env_cmd(env);
 	else if (ft_strcmp(info->toke1, "exit") == 0)
 		exit_cmd(info, minishell);
 	else
 	{
-		ft_putstr(info->toke1);
-		ft_putstr(": command not found\n");
+		execute_cmd(info, env);
 	}
-//	if (ft_strcmp(info->toke1, "unset") == 0)
+//	else if (ft_strcmp(info->toke1, "export") == 0)
+//		export_cmd(info, env);
+//	else if (ft_strcmp(info->toke1, "unset") == 0)
 //		unset_cmd();
 	return (0);
 }

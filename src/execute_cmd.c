@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:39:50 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 13:05:06 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/25 15:12:54 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,15 @@ static void	ft_memorymove(char *str)
     }
 }
 
-void	export_cmd(t_data *info, char **env)
+void	execute_cmd(t_data *info, char **env)
 {
 	char *path;
 	
 	path_finder(env, info);
 	if (!info->toke3)
 	{
-		ft_putstr_fd("export: not enough arguments\n", 2);
-		return ;
+		info->toke3 = malloc(sizeof(char *) * 2);
+		info->toke3[0] = info->toke1;
 	}
 	path = check_access(info->toke3, info->path_split);	
 	if (ft_strcmp(info->toke3[0], "awk") == 0 && info->toke3[1][0] == '\'')
@@ -64,8 +64,7 @@ void	export_cmd(t_data *info, char **env)
 	}
 	if (execve(path, info->toke3, env) != 0)
 	{
-		ft_putendl_fd("minishell: command not found", 2),
-		ft_putendl_fd(info->toke3[0], 2);
+		printf("minishell: %s: command not found\n", info->toke3[0]);
 		return ;
 	}
 }
