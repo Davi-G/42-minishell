@@ -133,17 +133,18 @@ void unset_cmd(t_mini *info_shell, char *var)
     delete_envp_vars(info_shell->envp, vars);
     free_array(vars);
 }
+*/
 
-int env_cmd(t_mini *info_shell)
+int env_cmd(char **env)
 {
 	int i;
 	
 	i = 0;
-	while (info_shell->envp[i])
-		ft_putendl_fd(info_shell->envp[i++], 1);
+		write(1, "H\n", 2);
+	while (env[i])
+		printf("%s\n", env[i++]);
 	return 0;
 }
-*/
 
 int	try_prev_dir(char *full_route)
 {
