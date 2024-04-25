@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/23 13:33:57 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/25 12:53:55 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ typedef struct s_data
 	char	*toke1;
 	char	*toke2;
 	char	**toke3;
+	char 	**path_split;
+	char 	**env;
 }	t_data;
 
 typedef struct s_master
@@ -47,7 +49,7 @@ typedef struct s_master
 
 /*----<Functions>----*/
 t_data	parser(char *str);
-int		exe_existing_command(t_data *info, t_master *minishell);
+int		exe_existing_command(t_data *info, t_master *minishell, char **env);
 int		cd_cmd(t_master *info_shell, t_data *command);
 int		echo_cmd(t_data *info);
 int		exit_cmd(t_data	*command, t_master *minishell);
@@ -57,5 +59,9 @@ void	free_array(char **array);
 int		pwd_cmd(void);
 void	ft_putstr(char *s);
 int		ft_strlen_array(char **array);
+char	**path_finder(char **env, t_data *info);
+char	**split_command(char *av);
+void	export_cmd(t_data *info, char **env);
+int 	env_cmd(char **env);
 
 #endif 
