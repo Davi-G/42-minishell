@@ -35,28 +35,6 @@ int	echo_cmd(t_data *info)
 	write (1, "\n", 1);
 	return (0);
 }
-/* {
-	int	n_boolean;
-	int	i;
-	
-	n_boolean = 0;
-	i = 1;
-	if (ft_strcmp(argv[i], "-n") == 0)
-	{
-		n_boolean = 1;
-		i++;
-	}
-	while (argv[i])
-	{
-		ft_putstr(argv[i]);
-		if (argv[i + 1])
-			write (1, " ", 1);
-		i++;
-	}
-	if (n_boolean != 1 && i != 1)
-		write (1, "\n", 1);
-	return (0);
-} */
 
 int	pwd_cmd(void)
 {
