@@ -3,7 +3,9 @@ NAME = minishell
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I ./includes/ -I ./42-libft/
-LDFLAGS = -L /opt/homebrew/Cellar/readline/8.2.7/lib -lreadline -L ./42-libft -l ft
+LDFLAGS = -L /Users/${USER}/.brew/Cellar/readline/8.2.10/lib -lreadline -L ./42-libft -l ft
+#For my Mac
+#LDFLAGS = -L /opt/homebrew/Cellar/readline/8.2.7/lib -lreadline -L ./42-libft -l ft
 
 SRCS_DIR = ./src/
 SRCS = main.c \

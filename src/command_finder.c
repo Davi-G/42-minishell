@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_finder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 14:52:45 by sergisan          #+#    #+#             */
-/*   Updated: 2024/04/25 14:34:35 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/25 16:08:11 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ int	exe_existing_command(t_data *info, t_master *minishell, char **env)
 	else if (ft_strcmp(info->toke1, "exit") == 0)
 		exit_cmd(info, minishell);
 	else
-	{
 		execute_cmd(info, env);
-	}
 //	else if (ft_strcmp(info->toke1, "export") == 0)
 //		export_cmd(info, env);
 //	else if (ft_strcmp(info->toke1, "unset") == 0)
