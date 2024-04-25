@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 18:21:17 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:44:10 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ static	int search_quotes(char *str, int i)
 t_data	parser(char *str)
 {
 	char	**split;
-	int		i;
-	int		j;
 	t_data	data;
 
 	ft_clean_toke(&data);
@@ -54,19 +52,19 @@ t_data	parser(char *str)
 	if (split[0] == NULL)
 		return data;
 	data.toke1 = split[0];
-	i = 1;
-	j = 0;
+	data.i = 1;
+	data.j = 0;
 	if (split[1] != NULL && split[1][0] == '-')
 		data.toke2 = split[1];
 	if (split[1] != NULL && split[1][0] == '-')
-		i = 2;
+		data.i = 2;
 	if (ft_strlen_array(split) > 1)
 	{
 		data.toke3 = malloc(sizeof(char *) * ft_strlen_array(split) - 1);
-		while (split[i])
+		while (split[data.i])
 		{
-			search_quotes(split[i], 0);
-			data.toke3[j++] = split[i++];
+			search_quotes(split[data.i], 0);
+			data.toke3[data.j++] = split[data.i++];
 		}
 	}
 	return (data);
