@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sergisan <sergisan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:12:39 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/23 15:22:11 by sergisan         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:05:46 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	free_array(char **array)
 
 void	ft_putstr(char *s)
 {
-	//incluir opcion para quitar comillas
 	int	i;
 
 	if (!s)
