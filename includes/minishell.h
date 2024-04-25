@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 16:55:27 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:43:32 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ typedef struct s_data
 	char	**toke3;
 	char 	**path_split;
 	char 	**env;
+	int		i;
+	int		j;
 }	t_data;
 
 typedef struct s_master
