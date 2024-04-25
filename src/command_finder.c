@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 14:52:45 by sergisan          #+#    #+#             */
-/*   Updated: 2024/04/25 16:08:11 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/25 19:02:03 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	exe_existing_command(t_data *info, t_master *minishell, char **env)
 	else if (ft_strcmp(info->toke1, "env") == 0)
 		env_cmd(env);
 	else if (ft_strcmp(info->toke1, "exit") == 0)
-		exit_cmd(info, minishell);
+		return (exit_cmd(info, minishell));
 	else
 		execute_cmd(info, env);
 //	else if (ft_strcmp(info->toke1, "export") == 0)
