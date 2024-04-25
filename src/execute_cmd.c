@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:39:50 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 15:12:54 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/25 16:55:11 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,4 @@ char	**path_finder(char **env, t_data *info)
 		i++;
 	}
 	return (0);
-}
-
-char	**split_command(char *av)
-{
-	char	**split_1;
-
-	split_1 = ft_split(av, ' ');
-	return (split_1);
 }

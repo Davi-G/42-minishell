@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 16:34:27 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/25 16:55:27 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int		pwd_cmd(void);
 void	ft_putstr(char *s);
 int		ft_strlen_array(char **array);
 char	**path_finder(char **env, t_data *info);
-char	**split_command(char *av);
 void	execute_cmd(t_data *info, char **env);
 int 	env_cmd(char **env);
 
