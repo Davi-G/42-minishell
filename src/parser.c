@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 12:24:22 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/25 18:21:17 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ft_clean_toke(t_data *info)
+static int	ft_clean_toke(t_data *info)
 {
 	info->toke1 = NULL;
 	info->toke2 = NULL;
 	info->toke3 = NULL;
+	return 0;
 }
 
 static	int search_quotes(char *str, int i)
@@ -50,6 +51,8 @@ t_data	parser(char *str)
 
 	ft_clean_toke(&data);
 	split = ft_split(str, ' ');
+	if (split[0] == NULL)
+		return data;
 	data.toke1 = split[0];
 	i = 1;
 	j = 0;
