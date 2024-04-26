@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:39:50 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 16:55:11 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/26 16:09:11 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,6 @@ static char	*check_access(char **command, char **path)
 	return (0);
 }
 
-static void	ft_memorymove(char *str)
-{
-    int i;
-
-    i = 0;
-    while (str[i])
-    {
-        str[i] = str[i + 1];
-        i++;
-    }
-}
-
 void	execute_cmd(t_data *info, char **env)
 {
 	char *path;
@@ -57,11 +45,6 @@ void	execute_cmd(t_data *info, char **env)
 		info->toke3[0] = info->toke1;
 	}
 	path = check_access(info->toke3, info->path_split);	
-	if (ft_strcmp(info->toke3[0], "awk") == 0 && info->toke3[1][0] == '\'')
-	{
-		ft_memorymove(info->toke3[1]);
-		info->toke3[1][ft_strlen(info->toke3[1]) - 1] = '\0';
-	}
 	if (execve(path, info->toke3, env) != 0)
 	{
 		printf("minishell: %s: command not found\n", info->toke3[0]);

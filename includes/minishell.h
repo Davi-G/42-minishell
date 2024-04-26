@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 18:43:32 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/26 23:45:44 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_data
 	char 	**env;
 	int		i;
 	int		j;
+	int 	error;
 }	t_data;
 
 typedef struct s_master
@@ -71,5 +72,6 @@ int		ft_strlen_array(char **array);
 char	**path_finder(char **env, t_data *info);
 void	execute_cmd(t_data *info, char **env);
 int 	env_cmd(char **env);
+void	export_cmd(t_data *command, char **env);
 
 #endif 

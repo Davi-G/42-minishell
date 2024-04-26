@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 18:44:10 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/27 01:29:29 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,84 @@
 
 static int	ft_clean_toke(t_data *info)
 {
+	info->error = 0;
 	info->toke1 = NULL;
 	info->toke2 = NULL;
 	info->toke3 = NULL;
 	return 0;
 }
 
-static	int search_quotes(char *str, int i)
+static int search_quotes(char **str, int i)
 {
-	int	quote;
-	int double_quote;
+	int quote;
+	int quote_1;
+	int open;
 
-	quote = 0;
-	double_quote = 2;
-	while ((str[i] == '\'' || str[i] == '\"') && str[i])
+	quote = -1;
+	open = 0;
+	while (str[quote++] && quote < i)
 	{
-		if (str[i] == '\'')
-			quote++;
-		if (str[i] == '\"')
-			double_quote++;
-		if (quote == 2 && str[i])
-			return quote;
-		if (double_quote == 4 && str[i])
-			return double_quote;
+		quote_1 = 0;
+		while (str[quote][quote_1])
+		{
+			if (quote_1 > 0 && str[quote][quote_1 - 1] == '\\')
+				;
+			if (open == 0 && str[quote][quote_1] == '\"')
+				open = 1;
+			else if (open == 0 && str[quote][quote_1] == '\'')
+				open = 2;
+			else if (open == 1 && str[quote][quote_1] == '\"')
+				open = 0;
+			else if (open == 2 && str[quote][quote_1] == '\'')
+				open = 0;
+			quote_1++;
+		}
+	}
+	return (open);
+}
+
+void	remove_quotes(t_data *info)
+{
+	int	i;
+	int j;
+	int k;
+
+	i = 0;
+	while (info->toke3[i])
+	{
+		j = 0;
+		k = 0;
+		while (info->toke3[i][j])
+		{
+			if (info->toke3[i][j] == '\"' || info->toke3[i][j] == '\'')
+				j++;
+			info->toke3[i][k] = info->toke3[i][j];
+			j++;
+			k++;
+		}
 		i++;
 	}
-	return (0);
+}
+
+static void parse_2(t_data *info, char **split)
+{
+	info->toke3 = malloc(sizeof(char *) * ft_strlen_array(split) - 1);
+	while (split[info->i])
+		info->toke3[info->j++] = split[info->i++];
+	if (ft_strcmp(info->toke3[0], "..") == 0)
+		return ;
+	else if (search_quotes(info->toke3, 2147483647) != 0)
+	{
+		info->error = 1;
+		return ;
+	}
+	else if (search_quotes(info->toke3, 2147483647) == 0)
+	{
+		if (info->toke3[0][0] == '\"' || info->toke3[0][0] == '\'')
+			remove_quotes(info);
+	}
+	else
+		return ;
 }
 
 t_data	parser(char *str)
@@ -59,13 +111,6 @@ t_data	parser(char *str)
 	if (split[1] != NULL && split[1][0] == '-')
 		data.i = 2;
 	if (ft_strlen_array(split) > 1)
-	{
-		data.toke3 = malloc(sizeof(char *) * ft_strlen_array(split) - 1);
-		while (split[data.i])
-		{
-			search_quotes(split[data.i], 0);
-			data.toke3[data.j++] = split[data.i++];
-		}
-	}
+		parse_2(&data, split);
 	return (data);
 }
