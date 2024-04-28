@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:12:39 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/25 16:05:46 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/27 14:37:35 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,24 @@ int	ft_strlen_array(char **array)
 	while (array[i])
 		i++;
 	return (i);
+}
+
+int	ft_strlen_array_full(char **array)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	while (array[i])
+	{
+		j = 0;
+		while (array[i][j])
+			j++;
+		k += j;
+		i++;
+	}
+	return (i + k - 1);
 }

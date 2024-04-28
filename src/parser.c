@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/27 01:29:29 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/27 21:32:04 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int search_quotes(char **str, int i)
 		{
 			if (quote_1 > 0 && str[quote][quote_1 - 1] == '\\')
 				;
-			if (open == 0 && str[quote][quote_1] == '\"')
+			else if (open == 0 && str[quote][quote_1] == '\"')
 				open = 1;
 			else if (open == 0 && str[quote][quote_1] == '\'')
 				open = 2;
@@ -45,31 +45,42 @@ static int search_quotes(char **str, int i)
 			else if (open == 2 && str[quote][quote_1] == '\'')
 				open = 0;
 			quote_1++;
+	printf("open: %d\n", open);
 		}
 	}
 	return (open);
 }
 
-void	remove_quotes(t_data *info)
+static void	remove_quotes(t_data *info)
 {
-	int	i;
-	int j;
 	int k;
+	int l;
+	char *aux;
 
-	i = 0;
-	while (info->toke3[i])
+	info->i = 0;
+	k = 0;
+	while (info->toke3[info->i])
 	{
-		j = 0;
+		aux = NULL;
+		aux = malloc(sizeof(char) * (ft_strlen(info->toke3[info->i]) + 1));
+		info->j = 0;
+		l = 0;
 		k = 0;
-		while (info->toke3[i][j])
+		while (info->toke3[info->i][info->j])
 		{
-			if (info->toke3[i][j] == '\"' || info->toke3[i][j] == '\'')
-				j++;
-			info->toke3[i][k] = info->toke3[i][j];
-			j++;
+			if (info->toke3[info->i][info->j] == '\"'
+				|| info->toke3[info->i][info->j] == '\'')
+				{
+					l++;
+					info->j++;
+				}
+			aux[k] = info->toke3[info->i][info->j];
 			k++;
+			info->j++;
 		}
-		i++;
+		if (l % 2 == 0 && l > 0)
+			info->toke3[info->i] = aux;
+		info->i++;
 	}
 }
 
@@ -78,6 +89,7 @@ static void parse_2(t_data *info, char **split)
 	info->toke3 = malloc(sizeof(char *) * ft_strlen_array(split) - 1);
 	while (split[info->i])
 		info->toke3[info->j++] = split[info->i++];
+	//printf("quotes: %d\n", search_quotes(info->toke3, 2147483647));
 	if (ft_strcmp(info->toke3[0], "..") == 0)
 		return ;
 	else if (search_quotes(info->toke3, 2147483647) != 0)

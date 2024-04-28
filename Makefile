@@ -6,6 +6,7 @@ CFLAGS = -Wall -Wextra -Werror -I ./includes/ -I ./42-libft/
 LDFLAGS = -L /Users/${USER}/.brew/Cellar/readline/8.2.10/lib -lreadline -L ./42-libft -l ft
 #For my Mac
 #LDFLAGS = -L /opt/homebrew/Cellar/readline/8.2.10/lib -lreadline -L ./42-libft -l ft
+#For Mac 42
 
 SRCS_DIR = ./src/
 SRCS = main.c \
