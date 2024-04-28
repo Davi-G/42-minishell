@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/26 21:11:54 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/04/28 14:55:28 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,26 @@ static char *set_home(char *home)
 	return (home);
 }
 
+static void	initialize_env(t_data *info, char **env)
+{
+	info->i = 0;
+	while (env[info->i])
+		info->i++;
+	info->env = ft_calloc((info->i) + 1, sizeof(char *));
+	info->i = 0;
+	if (!info->env)
+	{
+		ft_putstr_fd("Error: calloc fail\n", 2);
+		info->error = 1;
+		return ;
+	}
+	while (env[info->i])
+	{
+		info->env[info->i] = ft_strdup(env[info->i]);
+		info->i++;
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char		*out;
@@ -61,6 +81,7 @@ int	main(int ac, char **av, char **env)
 	control.exit_status = 0;
 	out = 0;
 	control.old_pwd = getcwd(0, 0);
+	initialize_env(&info, env);
 	while (control.exit_status != 1)
 	{
 		home = set_home(home);
