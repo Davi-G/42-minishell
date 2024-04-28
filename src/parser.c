@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/28 16:52:21 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/28 20:59:49 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,24 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 
 	info->i = 0;
 	k = 0;
-	aux = NULL;
 	if (tk == 3)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke3[info->i]) + 1));
 	if (tk == 1)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke1) + 1));
 	if (tk == 2)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke2) + 1));
-	write(1, "1\n", 2);
+	//printf("aux[%d] = %c\n", k, str[k]);
 	while (str[info->i])
 	{
 		info->j = 0;
-		if (str[info->i] == '\"' || str[info->i] == '\'')
+		if ((str[info->i] == '\"' || str[info->i] == '\''))
 			info->i++;
-		aux[k] = str[info->i];
-		k++;
+		aux[k++] = str[info->i];
+		//printf("aux[%d] = %c\n", k, str[k]);
 		info->i++;
 	}
+	if ((str[info->i] == '\"' || str[info->i] == '\''))
+		aux[k] = '\0';
 	if (tk == 1)
 		info->toke1 = aux;
 	if (tk == 2)
@@ -82,24 +83,26 @@ static void parse_2(t_data *info, char **split)
 	int l;
 
 	l = 0;
+	info->toke3 = NULL;
 	info->toke3 = malloc(sizeof(char *) * ft_strlen_array(split) - 1);
 	while (split[info->i])
 		info->toke3[info->j++] = split[info->i++];
 	if (ft_strcmp(info->toke3[0], "..") == 0)
 		return ;
 	info->i = 0;
-	while (info->toke3[info->i])
+	printf("len = %d\n", ft_strlen_array(info->toke3));
+	while (info->i <= ft_strlen_array(info->toke3))
 	{
+		write(1, "HERE\n", 5);
 		if (info->toke3[info->i] == NULL)
 			break ;
 		l += search_quotes(info->toke3[info->i], 2147483647);
-		//if (l % 2 == 0)
 		if (l % 2 != 0 && info->toke3[info->i + 1] == NULL)
 		{
 			info->error = 1;
 			return ;
 		}
-			remove_quotes(info->toke3[info->i], info, info->i, 3);
+		remove_quotes(info->toke3[info->i], info, info->i, 3);
 		info->i++;
 	}
 	return ;
@@ -128,7 +131,7 @@ t_data	parser(char *str)
 		data.toke2 = split[1];
 	if (split[1] != NULL && split[1][0] == '-')
 		data.i = 2;
-	if (ft_strlen_array(split) > 1)
+	if (ft_strlen_array(split) > 1 && split[data.i] != NULL)
 		parse_2(&data, split);
 	return (data);
 }
