@@ -26,7 +26,7 @@ int	echo_cmd(t_data *info)
 	while (info->toke3[i])
 	{
 		ft_putstr(info->toke3[i]);
-		if (info->toke3[i + 1])
+		if (ft_strlen_array(info->toke3) > 1 && i < ft_strlen_array(info->toke3) - 1)
 			write (1, " ", 1);
 		i++;
 	}
@@ -112,6 +112,28 @@ void unset_cmd(t_mini *info_shell, char *var)
     free_array(vars);
 }
 */
+
+void	initialize_env(t_data *info, char **envp)
+{
+	info->i == 0;
+
+	while (envp[info->i])
+		info->i++;
+	info->env = ft_calloc((info->i) + 1, sizeof(char *));
+	info->i = 0;
+	if (!info->env)
+	{
+		ft_putstr_fd("Error: calloc fail\n", 2);
+		info->error = 1;
+		return ;
+	}
+	while (envp[info->i])
+	{
+		info->env[info->i] = ft_strdup(envp[info->i]);
+		info->i++;
+	}
+	info->i = 0;
+}
 
 int env_cmd(char **env)
 {
@@ -266,5 +288,52 @@ void	export_cmd(t_data *command, char **env)
 		else
 			add_env_var(command, command->toke3[i]);
 		i++;
+	}
+}
+
+static char	**delete_envp_single_var(char **envp, char *var)
+{
+	int		i;
+	int		j;
+	char	**aux_envp;
+
+	i = 0;
+	j = 0;
+	while (envp[i])
+		i++;
+	new_envp = ft_calloc(i, sizeof(char *));
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strcmp(envp[i], var) != 0)
+		{
+			new_envp[j] = ft_strdup(envp[i]);
+			j++;
+		}
+		i++;
+	}
+	new_envp[j] = NULL;
+	free_array(envp);
+	return (new_envp);
+}
+
+void unset_cmd(t_data *info)
+{
+    info->i = 0;
+	info->j = 0;
+
+	while (info->toke3[info->i])
+	{
+		info->j = 0;
+		if (ft_strchr(info->toke3[info->i], '=') != NULL)
+			printf("minishell: unset: `%s': not a valid identifier\n", info->toke3[info->i]);
+		else
+		{
+			while (envp[info->j] && ft_strcmp(envp[info->j], info->toke3[info->i]) != 0)
+				info->j++;
+			if (envp[info->j])
+				envp = delete_envp_single_var(envp, info->toke3[info->i]);
+		}
+		info->i++;
 	}
 }
