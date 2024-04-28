@@ -164,6 +164,7 @@ int cd_cmd(t_master *info_shell, t_data *command)
     char *aux;
 
     aux = NULL;
+	printf("toke2 = %s\n", command->toke2);
     if (!command->toke3 && !command->toke2)
     {
         actualize_env(info_shell);
@@ -188,10 +189,10 @@ int cd_cmd(t_master *info_shell, t_data *command)
         printf("%s\n", info_shell->old_pwd);
     }
     else if (command->toke3[0][0] == '.' && command->toke3[0][1] == '.' && command->toke3[0][2] == '\0')
-        {
-            info_shell->old_pwd = getcwd(0, 0);
-            return (try_prev_dir(info_shell, getcwd(0, 0)));
-        }
+    {
+        info_shell->old_pwd = getcwd(0, 0);
+        return (try_prev_dir(info_shell, getcwd(0, 0)));
+    }
     else
         return (try_change_dir(info_shell, command, getcwd(0, 0)));
     return (0);
