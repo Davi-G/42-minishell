@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sergisan <sergisan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/28 14:55:28 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/04/28 19:34:17 by sergisan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,22 @@ static char *set_home(char *home)
 	return (home);
 }
 
-static void	initialize_env(t_data *info, char **env)
+static void	initialize_env(t_master *info_shell, char **env)
 {
-	info->i = 0;
-	while (env[info->i])
-		info->i++;
-	info->env = ft_calloc((info->i) + 1, sizeof(char *));
-	info->i = 0;
-	if (!info->env)
+	int	i;
+
+	i = 0;
+	while (env[i])
+		i++;
+	info_shell->env = ft_calloc(i + 1, sizeof(char *));
+	if (!info_shell->env)
 	{
 		ft_putstr_fd("Error: calloc fail\n", 2);
-		info->error = 1;
+info->error = 1;
 		return ;
 	}
-	while (env[info->i])
+	i = 0;
+	while (env[i])
 	{
 		info->env[info->i] = ft_strdup(env[info->i]);
 		info->i++;
