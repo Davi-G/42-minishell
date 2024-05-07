@@ -164,18 +164,12 @@ int cd_cmd(t_master *info_shell, t_data *command)
     char *aux;
 
     aux = NULL;
-	printf("toke2 = %s\n", command->toke2);
     if (!command->toke3 && !command->toke2)
     {
         actualize_env(info_shell);
         chdir(getenv("HOME"));
     }
-    else if (command->toke3[1])
-    {
-        ft_putstr("minishell: cd: too many arguments\n");
-        return (1);
-    }
-    else if (command->toke2 && ft_strcmp(command->toke2, "-") == 0)
+	else if (command->toke2 && ft_strcmp(command->toke2, "-") == 0)
     {
         aux = getcwd(0, 0);
         if (chdir(info_shell->old_pwd) == -1)
@@ -192,6 +186,11 @@ int cd_cmd(t_master *info_shell, t_data *command)
     {
         info_shell->old_pwd = getcwd(0, 0);
         return (try_prev_dir(info_shell, getcwd(0, 0)));
+    }
+    else if (command->toke3[1])
+    {
+        ft_putstr("minishell: cd: too many arguments\n");
+        return (1);
     }
     else
         return (try_change_dir(info_shell, command, getcwd(0, 0)));
