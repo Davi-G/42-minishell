@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42.fr>            +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/28 20:59:49 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/05/17 16:41:42 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,29 +47,25 @@ static int search_quotes(char *str, int i)
 
 static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 {
-	int k;
 	char *aux;
 
+	info->j = 0;
 	info->i = 0;
-	k = 0;
 	if (tk == 3)
-		aux = malloc(sizeof(char) * (ft_strlen(info->toke3[info->i]) + 1));
+		aux = malloc(sizeof(char) * (ft_strlen(info->toke3[info->j]) + 1));
 	if (tk == 1)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke1) + 1));
 	if (tk == 2)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke2) + 1));
-	//printf("aux[%d] = %c\n", k, str[k]);
-	while (str[info->i])
+	while (info->j < (int)ft_strlen(str))
 	{
-		info->j = 0;
-		if ((str[info->i] == '\"' || str[info->i] == '\''))
-			info->i++;
-		aux[k++] = str[info->i];
-		//printf("aux[%d] = %c\n", k, str[k]);
-		info->i++;
+		if ((str[info->j] == '\"' || str[info->j] == '\''))
+			info->j++;
+		aux[info->i++] = str[info->j];
+		info->j++;
 	}
-	if ((str[info->i] == '\"' || str[info->i] == '\''))
-		aux[k] = '\0';
+	if ((str[info->j] == '\"' || str[info->j] == '\''))
+		aux[info->i] = '\0';
 	if (tk == 1)
 		info->toke1 = aux;
 	if (tk == 2)
@@ -90,10 +86,8 @@ static void parse_2(t_data *info, char **split)
 	if (ft_strcmp(info->toke3[0], "..") == 0)
 		return ;
 	info->i = 0;
-	printf("len = %d\n", ft_strlen_array(info->toke3));
 	while (info->i <= ft_strlen_array(info->toke3))
 	{
-		write(1, "HERE\n", 5);
 		if (info->toke3[info->i] == NULL)
 			break ;
 		l += search_quotes(info->toke3[info->i], 2147483647);
