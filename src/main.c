@@ -6,11 +6,32 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/05/17 16:20:44 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/05/17 16:49:34 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	initialize_env(t_master *info_shell, char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+		i++;
+	info_shell->env = ft_calloc(i + 1, sizeof(char *));
+	if (!info_shell->env)
+	{
+		ft_putstr_fd("Error: calloc fail\n", 2);
+		return ;
+	}
+	i = 0;
+	while (env[i])
+	{
+		info_shell->env[i] = ft_strdup(env[i]);
+		i++;
+	}
+}
 
 static char	*home_finder(char *old_pwd, char *home)
 {
@@ -61,6 +82,7 @@ int	main(int ac, char **av, char **env)
 	control.exit_status = 0;
 	out = 0;
 	control.old_pwd = getcwd(0, 0);
+	initialize_env(&control, env);
 	while (control.exit_status != 1)
 	{
 		home = set_home(home);
