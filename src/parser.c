@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/05/01 12:07:50 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/05/17 16:41:42 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,29 +47,25 @@ static int search_quotes(char *str, int i)
 
 static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 {
-	int k;
 	char *aux;
 
 	info->j = 0;
-	k = 0;
+	info->i = 0;
 	if (tk == 3)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke3[info->j]) + 1));
 	if (tk == 1)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke1) + 1));
 	if (tk == 2)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke2) + 1));
-	//printf("aux[%d] = %c\n", k, str[k]);
-	while (str[info->j])
+	while (info->j < (int)ft_strlen(str))
 	{
-		info->j = 0;
 		if ((str[info->j] == '\"' || str[info->j] == '\''))
 			info->j++;
-		aux[k++] = str[info->j];
-		//printf("aux[%d] = %c\n", k, str[k]);
-		info->i++;
+		aux[info->i++] = str[info->j];
+		info->j++;
 	}
 	if ((str[info->j] == '\"' || str[info->j] == '\''))
-		aux[k] = '\0';
+		aux[info->i] = '\0';
 	if (tk == 1)
 		info->toke1 = aux;
 	if (tk == 2)
@@ -92,9 +88,6 @@ static void parse_2(t_data *info, char **split)
 	info->i = 0;
 	while (info->i <= ft_strlen_array(info->toke3))
 	{
-	printf("len = %d\n", ft_strlen_array(info->toke3));
-	printf("i = %d\n", info->i);
-		write(1, "HERE\n", 5);
 		if (info->toke3[info->i] == NULL)
 			break ;
 		l += search_quotes(info->toke3[info->i], 2147483647);
