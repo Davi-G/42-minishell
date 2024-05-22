@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sergisan <sergisan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/04/28 18:31:23 by sergisan         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:58:09 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_data
 	char 	**path_split;
 	int		i;
 	int		j;
+	int		x;
 	int 	error;
 }	t_data;
 
@@ -76,5 +77,6 @@ int		ft_strlen_array(char **array);
 char	**path_finder(char **env, t_data *info);
 void	execute_cmd(t_data *info, char **env);
 int		ft_strlen_array_full(char **array);
+void   error(t_data *info);
 
 #endif 

@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/05/17 16:49:34 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/05/22 16:57:37 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ int	main(int ac, char **av, char **env)
 		info = parser(out);
 		if (info.error == 0 && info.toke1)
 			exe_existing_command(&info, &control, env);
+		else
+			error(&info);
 	}
 	return (0);
 }
