@@ -15,6 +15,7 @@ SRCS = main.c \
 		command_finder.c \
 		existing_cmd.c \
 		execute_cmd.c \
+		error.c
 
 OBJS_DIR = ./obj/
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))

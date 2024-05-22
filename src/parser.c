@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/05/17 16:41:42 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/05/22 16:53:22 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,40 +45,44 @@ static int search_quotes(char *str, int i)
 	return (open);
 }
 
+static void search_token(char *str, t_data *info, int pos, int tk)
+{
+	if (tk == 1)
+		info->toke1 = str;
+	else if (tk == 2)
+		info->toke2 = str;
+	else if (tk == 3)
+		info->toke3[pos] = str;
+}
+
 static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 {
 	char *aux;
 
 	info->j = 0;
-	info->i = 0;
+	info->x = 0;
 	if (tk == 3)
-		aux = malloc(sizeof(char) * (ft_strlen(info->toke3[info->j]) + 1));
-	if (tk == 1)
+		aux = malloc(sizeof(char) * (ft_strlen(info->toke3[pos]) + 1));
+	else if (tk == 1)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke1) + 1));
-	if (tk == 2)
+	else if (tk == 2)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke2) + 1));
 	while (info->j < (int)ft_strlen(str))
 	{
 		if ((str[info->j] == '\"' || str[info->j] == '\''))
 			info->j++;
-		aux[info->i++] = str[info->j];
+		aux[info->x++] = str[info->j];
 		info->j++;
 	}
 	if ((str[info->j] == '\"' || str[info->j] == '\''))
-		aux[info->i] = '\0';
-	if (tk == 1)
-		info->toke1 = aux;
-	if (tk == 2)
-		info->toke2 = aux;
-	if (tk == 3)
-		info->toke3[pos] = aux;
+		aux[info->x] = '\0';
+	search_token(aux, info, pos, tk);
 }
 
 static void parse_2(t_data *info, char **split)
 {
 	int l;
 
-	l = 0;
 	info->toke3 = NULL;
 	info->toke3 = malloc(sizeof(char *) * ft_strlen_array(split) - 1);
 	while (split[info->i])
@@ -86,6 +90,7 @@ static void parse_2(t_data *info, char **split)
 	if (ft_strcmp(info->toke3[0], "..") == 0)
 		return ;
 	info->i = 0;
+	l = 0;
 	while (info->i <= ft_strlen_array(info->toke3))
 	{
 		if (info->toke3[info->i] == NULL)
