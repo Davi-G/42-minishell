@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/05/22 16:58:09 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/05/23 21:31:39 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int		ft_strlen_array(char **array);
 char	**path_finder(char **env, t_data *info);
 void	execute_cmd(t_data *info, char **env);
 int		ft_strlen_array_full(char **array);
-void   error(t_data *info);
+void	error(t_data *info);
+char	**unitary_command(t_data *info);
 
 #endif 
