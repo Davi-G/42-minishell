@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/05/22 16:53:22 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/05 20:10:32 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ static int search_quotes(char *str, int i)
 	quote = 0;
 	while (str[quote] && quote < i)
 	{
-		if (quote > 0 && str[quote - 1] == '\\')
-			;
-		else if (open == 0 && str[quote] == '\"')
+		/* if (i > 0 && str[i - 1] == '\\')
+			continue; */	
+		if (open == 0 && str[quote] == '\"')
 			open = 1;
 		else if (open == 0 && str[quote] == '\'')
-			open = 2;
+			open = 3;
 		else if (open == 1 && str[quote] == '\"')
 			open = 0;
-		else if (open == 2 && str[quote] == '\'')
+		else if (open == 3 && str[quote] == '\'')
 			open = 0;
 		quote++;
 	}
@@ -53,12 +53,39 @@ static void search_token(char *str, t_data *info, int pos, int tk)
 		info->toke2 = str;
 	else if (tk == 3)
 		info->toke3[pos] = str;
+	/* if (str[0] == ';')
+	{
+		info->toke1 = NULL;
+		ft_strlcpy(info->toke1, str, ft_strlen(str + 1));
+	}
+	printf("toke1: %s\n", info->toke1); */
+}
+
+static char quote_type(char *str)
+{
+	int i;
+	char quote;
+
+	quote = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\"' || str[i] == '\'')
+		{
+			quote = str[i];
+			return (quote);
+		}
+		i++;
+	}
+	return (quote);
 }
 
 static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 {
 	char *aux;
+	char quote;
 
+	quote = quote_type(str);
 	info->j = 0;
 	info->x = 0;
 	if (tk == 3)
@@ -67,9 +94,11 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke1) + 1));
 	else if (tk == 2)
 		aux = malloc(sizeof(char) * (ft_strlen(info->toke2) + 1));
-	while (info->j < (int)ft_strlen(str))
+	while (info->j <= (int)ft_strlen(str))
 	{
-		if ((str[info->j] == '\"' || str[info->j] == '\''))
+		if (quote == str[info->j])
+			info->j++;
+		if (str[info->j] == '\\')
 			info->j++;
 		aux[info->x++] = str[info->j];
 		info->j++;
@@ -83,7 +112,7 @@ static void parse_2(t_data *info, char **split)
 {
 	int l;
 
-	info->toke3 = NULL;
+	//info->toke3 = NULL;
 	info->toke3 = malloc(sizeof(char *) * ft_strlen_array(split) - 1);
 	while (split[info->i])
 		info->toke3[info->j++] = split[info->i++];
@@ -107,11 +136,14 @@ static void parse_2(t_data *info, char **split)
 	return ;
 }
 
-t_data	parser(char *str)
+t_data	parser(char *str, t_master *control, char **env)
 {
 	char	**split;
 	t_data	data;
+	//pid_t	pid;
 
+	(void)control;
+	(void)env;
 	ft_clean_toke(&data);
 	split = ft_split(str, ' ');
 	if (split[0] == NULL)
@@ -124,6 +156,28 @@ t_data	parser(char *str)
 	}
 	else
 		remove_quotes(data.toke1, &data, 0, 1);
+	//while (split)
+	//{
+		if (split[1][0] == ';')
+		{
+			/* pid = fork();
+			if (pid == 0)
+				exit(0);
+			if (data.toke1 != NULL)
+			{
+				exe_existing_command(&data, control, env);
+			} */
+		//	else
+		//	{
+				write(1, "\n", 1);
+				printf("toke1: %s\n", data.toke1);
+				data.toke1 = NULL;
+				split = ft_split(split[1], ';');
+				//printf("split[1]: %s\n", split[0]);
+				data.toke1 = split[0];	
+		//	}
+		}
+	//}
 	data.i = 1;
 	data.j = 0;
 	if (split[1] != NULL && split[1][0] == '-')

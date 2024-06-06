@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 16:54:34 by davi-g            #+#    #+#             */
-/*   Updated: 2024/05/22 17:00:14 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/03 21:13:36 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ void   error(t_data *info)
 	
 	msg = NULL;
 	if (info->error == 1)
-		msg = "minishell: syntax error quotes not closed";
+		msg = "minishell: syntax error with open quotes";
 	error_msg(msg);
 }

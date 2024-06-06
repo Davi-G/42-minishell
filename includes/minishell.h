@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/05/23 21:31:39 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/05 18:53:04 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_master
 }	t_master;
 
 /*----<Functions>----*/
-t_data	parser(char *str);
+t_data	parser(char *str, t_master *control, char **env);
 int		exe_existing_command(t_data *info, t_master *minishell, char **env);
 int		cd_cmd(t_master *info_shell, t_data *command);
 int		echo_cmd(t_data *info);
