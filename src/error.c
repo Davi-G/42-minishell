@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 16:54:34 by davi-g            #+#    #+#             */
-/*   Updated: 2024/05/22 17:00:14 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/06 11:53:14 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ void   error(t_data *info)
 	
 	msg = NULL;
 	if (info->error == 1)
-		msg = "minishell: syntax error quotes not closed";
+		msg = "minishell: syntax error with open quotes";
 	error_msg(msg);
 }
