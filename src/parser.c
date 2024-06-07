@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/05 20:10:32 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/07 11:47:41 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_clean_toke(t_data *info)
+static t_data	ft_clean_toke(t_data *info)
 {
 	info->error = 0;
 	info->toke1 = NULL;
 	info->toke2 = NULL;
 	info->toke3 = NULL;
-	return 0;
+	return *info;
 }
 
 static int search_quotes(char *str, int i)
@@ -53,12 +53,7 @@ static void search_token(char *str, t_data *info, int pos, int tk)
 		info->toke2 = str;
 	else if (tk == 3)
 		info->toke3[pos] = str;
-	/* if (str[0] == ';')
-	{
-		info->toke1 = NULL;
-		ft_strlcpy(info->toke1, str, ft_strlen(str + 1));
-	}
-	printf("toke1: %s\n", info->toke1); */
+	
 }
 
 static char quote_type(char *str)
@@ -70,6 +65,7 @@ static char quote_type(char *str)
 	i = 0;
 	while (str[i])
 	{
+	write(1, "1\n", 2);
 		if (str[i] == '\"' || str[i] == '\'')
 		{
 			quote = str[i];
@@ -88,12 +84,13 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 	quote = quote_type(str);
 	info->j = 0;
 	info->x = 0;
+	aux = 0;
 	if (tk == 3)
-		aux = malloc(sizeof(char) * (ft_strlen(info->toke3[pos]) + 1));
+		aux = calloc(ft_strlen(info->toke3[pos]), sizeof(char));
 	else if (tk == 1)
-		aux = malloc(sizeof(char) * (ft_strlen(info->toke1) + 1));
+		aux = calloc(ft_strlen(info->toke1), sizeof(char));
 	else if (tk == 2)
-		aux = malloc(sizeof(char) * (ft_strlen(info->toke2) + 1));
+		aux = calloc(ft_strlen(info->toke2), sizeof(char));
 	while (info->j <= (int)ft_strlen(str))
 	{
 		if (quote == str[info->j])
@@ -112,9 +109,9 @@ static void parse_2(t_data *info, char **split)
 {
 	int l;
 
-	//info->toke3 = NULL;
-	info->toke3 = malloc(sizeof(char *) * ft_strlen_array(split) - 1);
-	while (split[info->i])
+	info->toke3 = NULL;
+	info->toke3 = calloc(ft_strlen_array(split) - 1, sizeof(char *));
+	while (info->i <= ft_strlen_array(split) - 1)
 		info->toke3[info->j++] = split[info->i++];
 	if (ft_strcmp(info->toke3[0], "..") == 0)
 		return ;
@@ -130,54 +127,31 @@ static void parse_2(t_data *info, char **split)
 			info->error = 1;
 			return ;
 		}
-		remove_quotes(info->toke3[info->i], info, info->i, 3);
+		if (info->toke3[info->i][0] == '\"' || info->toke3[info->i][0] == '\'')
+			remove_quotes(info->toke3[info->i], info, info->i, 3);
 		info->i++;
 	}
 	return ;
 }
 
-t_data	parser(char *str, t_master *control, char **env)
+t_data	parser(char *str)
 {
 	char	**split;
 	t_data	data;
-	//pid_t	pid;
 
-	(void)control;
-	(void)env;
-	ft_clean_toke(&data);
+	data = ft_clean_toke(&data);
 	split = ft_split(str, ' ');
 	if (split[0] == NULL)
 		return data;
-	data.toke1 = split[0];
-	if (search_quotes(data.toke1, 2147483647) != 0)
+	if (search_quotes(split[0], 2147483647) != 0)
 	{
 		data.error = 1;
 		return data;
 	}
-	else
+	else if (split[0][0] == '\"' || split[0][0] == '\'')
 		remove_quotes(data.toke1, &data, 0, 1);
-	//while (split)
-	//{
-		if (split[1][0] == ';')
-		{
-			/* pid = fork();
-			if (pid == 0)
-				exit(0);
-			if (data.toke1 != NULL)
-			{
-				exe_existing_command(&data, control, env);
-			} */
-		//	else
-		//	{
-				write(1, "\n", 1);
-				printf("toke1: %s\n", data.toke1);
-				data.toke1 = NULL;
-				split = ft_split(split[1], ';');
-				//printf("split[1]: %s\n", split[0]);
-				data.toke1 = split[0];	
-		//	}
-		}
-	//}
+	else
+		data.toke1 = split[0];
 	data.i = 1;
 	data.j = 0;
 	if (split[1] != NULL && split[1][0] == '-')

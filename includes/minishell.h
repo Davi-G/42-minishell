@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/05 18:53:04 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/06 19:00:11 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define MINISHELL_H
 
 /*----<Includes>----*/
-# include <../42-libft/libft.h>
+# include "../42-libft/libft.h"
+//# include "libft.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -25,9 +26,9 @@
 # include <limits.h>
 # include <signal.h>
 # include <errno.h>
+# include <sys/ioctl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <sys/ioctl.h>
 
 /*----<Colors>----*/
 # define RESET		"\e[0m"
@@ -61,7 +62,7 @@ typedef struct s_master
 }	t_master;
 
 /*----<Functions>----*/
-t_data	parser(char *str, t_master *control, char **env);
+t_data	parser(char *str);
 int		exe_existing_command(t_data *info, t_master *minishell, char **env);
 int		cd_cmd(t_master *info_shell, t_data *command);
 int		echo_cmd(t_data *info);
