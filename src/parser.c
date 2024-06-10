@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/07 11:47:41 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/10 18:16:34 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ static char quote_type(char *str)
 	i = 0;
 	while (str[i])
 	{
-	write(1, "1\n", 2);
 		if (str[i] == '\"' || str[i] == '\'')
 		{
 			quote = str[i];
@@ -84,7 +83,6 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 	quote = quote_type(str);
 	info->j = 0;
 	info->x = 0;
-	aux = 0;
 	if (tk == 3)
 		aux = calloc(ft_strlen(info->toke3[pos]), sizeof(char));
 	else if (tk == 1)
@@ -110,7 +108,7 @@ static void parse_2(t_data *info, char **split)
 	int l;
 
 	info->toke3 = NULL;
-	info->toke3 = calloc(ft_strlen_array(split) - 1, sizeof(char *));
+	info->toke3 = calloc(ft_strlen_array(split), sizeof(char *));
 	while (info->i <= ft_strlen_array(split) - 1)
 		info->toke3[info->j++] = split[info->i++];
 	if (ft_strcmp(info->toke3[0], "..") == 0)
@@ -127,8 +125,7 @@ static void parse_2(t_data *info, char **split)
 			info->error = 1;
 			return ;
 		}
-		if (info->toke3[info->i][0] == '\"' || info->toke3[info->i][0] == '\'')
-			remove_quotes(info->toke3[info->i], info, info->i, 3);
+		remove_quotes(info->toke3[info->i], info, info->i, 3);
 		info->i++;
 	}
 	return ;
@@ -143,15 +140,14 @@ t_data	parser(char *str)
 	split = ft_split(str, ' ');
 	if (split[0] == NULL)
 		return data;
+	data.toke1 = split[0];
 	if (search_quotes(split[0], 2147483647) != 0)
 	{
 		data.error = 1;
 		return data;
 	}
-	else if (split[0][0] == '\"' || split[0][0] == '\'')
-		remove_quotes(data.toke1, &data, 0, 1);
 	else
-		data.toke1 = split[0];
+		remove_quotes(data.toke1, &data, 0, 1);
 	data.i = 1;
 	data.j = 0;
 	if (split[1] != NULL && split[1][0] == '-')
