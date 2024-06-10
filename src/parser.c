@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/10 18:16:34 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/10 18:49:26 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void search_token(char *str, t_data *info, int pos, int tk)
 		info->toke2 = str;
 	else if (tk == 3)
 		info->toke3[pos] = str;
-	
+	return ;
 }
 
 static char quote_type(char *str)
@@ -89,7 +89,7 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 		aux = calloc(ft_strlen(info->toke1), sizeof(char));
 	else if (tk == 2)
 		aux = calloc(ft_strlen(info->toke2), sizeof(char));
-	while (info->j <= (int)ft_strlen(str))
+	while (info->j < (int)ft_strlen(str))
 	{
 		if (quote == str[info->j])
 			info->j++;
@@ -101,6 +101,7 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 	if ((str[info->j] == '\"' || str[info->j] == '\''))
 		aux[info->x] = '\0';
 	search_token(aux, info, pos, tk);
+	//free(aux);
 }
 
 static void parse_2(t_data *info, char **split)
