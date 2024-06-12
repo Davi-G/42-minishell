@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/10 18:49:26 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/12 14:10:32 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,43 @@
 static t_data	ft_clean_toke(t_data *info)
 {
 	info->error = 0;
+	info->quote = 0;
 	info->toke1 = NULL;
 	info->toke2 = NULL;
 	info->toke3 = NULL;
 	return *info;
 }
 
-static int search_quotes(char *str, int i)
+static char quote_type(char *str)
+{
+	int i;
+	char quote;
+
+	quote = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\"' || str[i] == '\'')
+		{
+			quote = str[i];
+			return (quote);
+		}
+		i++;
+	}
+	return (quote);
+}
+
+static int search_quotes(char *str, int pos, t_data *info)
 {
 	int quote;
 	int open;
 
 	open = 0;
 	quote = 0;
-	while (str[quote] && quote < i)
+	if (info->quote	== 0)
+		info->quote = quote_type(str);
+	while (str[quote] && quote < pos)
 	{
-		/* if (i > 0 && str[i - 1] == '\\')
-			continue; */	
 		if (open == 0 && str[quote] == '\"')
 			open = 1;
 		else if (open == 0 && str[quote] == '\'')
@@ -73,6 +93,7 @@ static char quote_type(char *str)
 		i++;
 	}
 	return (quote);
+
 }
 
 static void	remove_quotes(char *str, t_data *info, int pos, int tk)
@@ -80,7 +101,8 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 	char *aux;
 	char quote;
 
-	quote = quote_type(str);
+	quote = info->quote;
+//	quote = quote_type(str);
 	info->j = 0;
 	info->x = 0;
 	if (tk == 3)
@@ -95,11 +117,13 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 			info->j++;
 		if (str[info->j] == '\\')
 			info->j++;
-		aux[info->x++] = str[info->j];
+		aux[info->x] = str[info->j];
+		info->x++;
 		info->j++;
 	}
 	if ((str[info->j] == '\"' || str[info->j] == '\''))
 		aux[info->x] = '\0';
+	aux[info->x++] = '\0';
 	search_token(aux, info, pos, tk);
 	//free(aux);
 }
@@ -120,7 +144,7 @@ static void parse_2(t_data *info, char **split)
 	{
 		if (info->toke3[info->i] == NULL)
 			break ;
-		l += search_quotes(info->toke3[info->i], 2147483647);
+		l += search_quotes(info->toke3[info->i], 2147483647, info);
 		if (l % 2 != 0 && info->toke3[info->i + 1] == NULL)
 		{
 			info->error = 1;
@@ -142,13 +166,14 @@ t_data	parser(char *str)
 	if (split[0] == NULL)
 		return data;
 	data.toke1 = split[0];
-	if (search_quotes(split[0], 2147483647) != 0)
+	if (search_quotes(split[0], 2147483647, &data) != 0)
 	{
 		data.error = 1;
 		return data;
 	}
 	else
 		remove_quotes(data.toke1, &data, 0, 1);
+	data.quote = 0;
 	data.i = 1;
 	data.j = 0;
 	if (split[1] != NULL && split[1][0] == '-')
