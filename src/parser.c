@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/12 14:10:32 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/12 14:22:22 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 	char quote;
 
 	quote = info->quote;
-//	quote = quote_type(str);
 	info->j = 0;
 	info->x = 0;
 	if (tk == 3)
@@ -117,15 +116,13 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 			info->j++;
 		if (str[info->j] == '\\')
 			info->j++;
-		aux[info->x] = str[info->j];
-		info->x++;
+		aux[info->x++] = str[info->j];
 		info->j++;
 	}
 	if ((str[info->j] == '\"' || str[info->j] == '\''))
 		aux[info->x] = '\0';
 	aux[info->x++] = '\0';
 	search_token(aux, info, pos, tk);
-	//free(aux);
 }
 
 static void parse_2(t_data *info, char **split)
