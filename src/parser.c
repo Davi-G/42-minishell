@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/12 14:22:22 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/12 14:26:11 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,26 +74,6 @@ static void search_token(char *str, t_data *info, int pos, int tk)
 	else if (tk == 3)
 		info->toke3[pos] = str;
 	return ;
-}
-
-static char quote_type(char *str)
-{
-	int i;
-	char quote;
-
-	quote = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\"' || str[i] == '\'')
-		{
-			quote = str[i];
-			return (quote);
-		}
-		i++;
-	}
-	return (quote);
-
 }
 
 static void	remove_quotes(char *str, t_data *info, int pos, int tk)
