@@ -73,11 +73,27 @@ static void search_token(char *str, t_data *info, int pos, int tk)
 		info->toke2 = str;
 	else if (tk == 3)
 		info->toke3[pos] = str;
-	/* if (tk == 1)
-		printf("toke1: %s\n", info->toke1);
-	if (tk == 3)
-		printf("toke3: %s\n", info->toke3[pos]);
- */
+	return ;
+}
+
+static char quote_type(char *str)
+{
+	int i;
+	char quote;
+
+	quote = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\"' || str[i] == '\'')
+		{
+			quote = str[i];
+			return (quote);
+		}
+		i++;
+	}
+	return (quote);
+
 }
 
 static void	remove_quotes(char *str, t_data *info, int pos, int tk)
@@ -109,6 +125,7 @@ static void	remove_quotes(char *str, t_data *info, int pos, int tk)
 		aux[info->x] = '\0';
 	aux[info->x++] = '\0';
 	search_token(aux, info, pos, tk);
+	//free(aux);
 }
 
 static void parse_2(t_data *info, char **split)
