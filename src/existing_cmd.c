@@ -22,7 +22,10 @@ int echo_cmd(t_data *info)
     if (ft_strcmp(info->toke2, "-n") == 0)
         n_boolean = 1;
     if (!info->toke3)
+    {
+        ft_putstr("\n");
         return (1);
+    }
     while (info->toke3[i])
     {
         ft_putstr(info->toke3[i]);
@@ -82,7 +85,7 @@ void    initialize_env(t_master *info_shell, t_data *command, char **envp)
     info_shell->i = 0;
     if (!info_shell->env)
     {
-        ft_putstr_fd("Error: calloc fail\n", 2);
+        ft_putstr("Error: calloc fail\n");
         command->error = 1;
         return ;
     }
