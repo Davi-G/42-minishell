@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:39:50 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/06 11:53:11 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/17 16:34:00 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*check_access(char **command, char **path)
 		return (0);
 	while (path[i])
 	{
-	 	aux = path[i];
+		aux = path[i];
 		str = ft_strjoin(aux, "/");
 		aux = ft_strjoin(str, command[0]);
 		if (access(aux, X_OK) == 0)
@@ -79,31 +79,37 @@ char	**unitary_command(t_data *info)
 	return (command);
 }
 
-void	execute_cmd(t_data *info, char **env)
+int	execute_cmd(t_data *info, char **env)
 {
 	char *path;
 	char **command;
 	pid_t pid;
 	
 	command = malloc(sizeof(char *) * 10);
+	path_finder(env, info);
+	command = unitary_command(info);
+	path = check_access(command, info->path_split);
+	if (!path)
+	{
+		printf("minishell: %s: command not found\n", info->toke1);
+		free (command);
+		return (1);
+	}
 	pid = fork();
 	if (pid < 0)
 	{
 		printf("Fork error\n");
 		exit(1);
 	}
-	path_finder(env, info);
-	command = unitary_command(info);
-	path = check_access(command, info->path_split);
 	if (pid != 0)
 		waitpid(pid, NULL, 0);
 	else if (execve(path, command, env) != 0)
 	{
-		printf("minishell: %s: command not found\n", info->toke3[0]);
 		free (command);
-		return ;
+		return (1);
 	}
 	free (command);
+	return (0);
 }
 
 char	**path_finder(char **env, t_data *info)
