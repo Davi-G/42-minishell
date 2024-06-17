@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/12 13:45:03 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/17 02:43:42 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,14 @@ int		exit_cmd(t_data	*command, t_master *minishell);
 int		pwd_cmd(void);
 int 	env_cmd(t_master *info_shell);
 void    export_cmd(t_master *info_shell, t_data *command, char **env);
+void	unset_cmd(t_master *info_shell, t_data *command);
 int		ft_strcmp(char *str1, char *str2);
 int		is_numeric(char *argv);
 void	free_array(char **array);
 void	ft_putstr(char *s);
 int		ft_strlen_array(char **array);
 char	**path_finder(char **env, t_data *info);
-void	execute_cmd(t_data *info, char **env);
+int	execute_cmd(t_data *info, char **env);
 int		ft_strlen_array_full(char **array);
 void	error(t_data *info);
 char	**unitary_command(t_data *info);

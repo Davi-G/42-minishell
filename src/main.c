@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/12 14:13:24 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/17 03:12:06 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,12 @@ int	main(int ac, char **av, char **env)
 	t_master	control;
 	t_data		info;
 
-	(void)ac;
-	(void)av;
 	using_history();
 	control.exit_status = 0;
 	out = 0;
 	control.old_pwd = getcwd(0, 0);
 	initialize_env(&control, env);
-	while (control.exit_status != 1)
+	while (control.exit_status != 1 && ac == 1 && av[0])
 	{
 		home = set_home(home);
 		out = readline(home);
@@ -95,6 +93,10 @@ int	main(int ac, char **av, char **env)
 			exe_existing_command(&info, &control, env);
 		else
 			error(&info);
+		/* printf("error: %d\n", info.error);
+		if (info.error == 3)
+			control.exit_status = exit_cmd(&info, &control);
+		 */	
 	}
 	return (0);
 }
