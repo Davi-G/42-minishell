@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/12 14:26:11 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/18 17:40:09 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ static void parse_2(t_data *info, char **split)
 {
 	int l;
 
-	info->toke3 = NULL;
+	info->j = 0;
 	info->toke3 = calloc(ft_strlen_array(split), sizeof(char *));
 	while (info->i <= ft_strlen_array(split) - 1)
 		info->toke3[info->j++] = split[info->i++];
@@ -152,12 +152,13 @@ t_data	parser(char *str)
 		remove_quotes(data.toke1, &data, 0, 1);
 	data.quote = 0;
 	data.i = 1;
-	data.j = 0;
 	if (split[1] != NULL && split[1][0] == '-')
-		data.toke2 = split[1];
+		data.toke2 = ft_strdup(split[1]);
 	if (split[1] != NULL && split[1][0] == '-')
 		data.i = 2;
 	if (ft_strlen_array(split) > 1 && split[data.i] != NULL)
 		parse_2(&data, split);
+	free_array(split);
+	printf("toke3[0]: %s\n", data.toke3[0]);
 	return (data);
 }

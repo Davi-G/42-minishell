@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 14:52:45 by sergisan          #+#    #+#             */
-/*   Updated: 2024/06/17 16:07:54 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/18 16:30:30 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ int	exe_existing_command(t_data *command, t_master *info_shell, char **env)
 	else if (ft_strcmp(command->toke1, "unset") == 0)
 		unset_cmd(info_shell, command);
 	else
-	{
-		printf("executing command %d \n", execute_cmd(command, env));
-	}
+		execute_cmd(command, env);
 	return (0);
 }
