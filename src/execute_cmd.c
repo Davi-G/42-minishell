@@ -63,18 +63,18 @@ char	**unitary_command(t_data *info)
 	command = malloc(sizeof(char *) * 3);
 	if (info->toke2)
 	{
-		command[0] = info->toke1;
-		command[1] = info->toke2; 
+		command[0] = info->toke1[0];
+		command[1] = info->toke2[0]; 
 		/* aux = ft_strjoin(info->toke1, " ");
 		command = ft_strjoin(aux, info->toke2); */
 	}
 	else if (info->toke3)
 	{
-		aux = ft_strjoin(info->toke1, " ");
+		aux = ft_strjoin(info->toke1[0], " ");
 		command[0] = ft_strjoin(aux, info->toke3[0]);
 	}
 	else
-		command[0] = ft_strdup(info->toke1);
+		command[0] = ft_strdup(info->toke1[0]);
 	free (aux);
 	return (command);
 }
@@ -88,15 +88,15 @@ int	execute_cmd(t_data *info, char **env)
 	command = malloc(sizeof(char *) * 10);
 	path_finder(env, info);
 	command = unitary_command(info);
-	if (ft_strchr(info->toke1, '/') != NULL)
-        path = ft_strdup(info->toke1);
+	if (ft_strchr(info->toke1[0], '/') != NULL)
+        path = ft_strdup(info->toke1[0]);
     else
 	{
         path = check_access(command, info->path_split);
 	}
 	if (!path)
 	{
-		printf("minishell: %s: command not found\n", info->toke1);
+		printf("minishell: %s: command not found\n", info->toke1[0]);
 		free (command);
 		return (1);
 	}

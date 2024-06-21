@@ -23,7 +23,7 @@ int	echo_cmd(t_data *info)
 
 	i = 0;
 	n_boolean = 0;
-	if (ft_strcmp(info->toke2, "-n") == 0)
+	if (ft_strcmp(info->toke2[0], "-n") == 0)
 		n_boolean = 1;
 	if (!info->toke3)
 	{
@@ -179,7 +179,7 @@ int	cd_cmd(t_master *info_shell, t_data *command)
 		actualize_env(info_shell);
 		chdir(getenv("HOME"));
 	}
-	else if (command->toke2 && ft_strcmp(command->toke2, "-") == 0)
+	else if (command->toke2[0] && ft_strcmp(command->toke2[0], "-") == 0)
 	{
 		aux = getcwd(0, 0);
 		if (chdir(info_shell->old_pwd) == -1)

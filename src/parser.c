@@ -140,7 +140,10 @@ t_data	parser(char *str)
 	char	**split_pipe;
 	char	**split;
 
-	(void)split_dot;
+	split_dot = ft_split(str, ';');
+	data.i = 0;
+	while (split_dot[data.i])
+		ft_printf("dot: %s\n", split_dot[data.i++]);
 	(void)split_pipe;
 	(void)split;
 	data.i = 0;

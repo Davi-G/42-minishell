@@ -17,19 +17,19 @@
 
 int	exe_existing_command(t_data *command, t_master *info_shell, char **env)
 {
-	if (ft_strcmp(command->toke1, "echo") == 0)
+	if (ft_strcmp(command->toke1[0], "echo") == 0)
 		return (echo_cmd(command));
-	else if (ft_strcmp(command->toke1, "pwd") == 0)
+	else if (ft_strcmp(command->toke1[0], "pwd") == 0)
 		return (pwd_cmd());
-	else if (ft_strcmp(command->toke1, "cd") == 0)
+	else if (ft_strcmp(command->toke1[0], "cd") == 0)
 		return (cd_cmd(info_shell, command));
-	else if (ft_strcmp(command->toke1, "env") == 0)
+	else if (ft_strcmp(command->toke1[0], "env") == 0)
 		env_cmd(info_shell);
-	else if (ft_strcmp(command->toke1, "exit") == 0)
+	else if (ft_strcmp(command->toke1[0], "exit") == 0)
 		return (exit_cmd(command, info_shell));
-	else if (ft_strcmp(command->toke1, "export") == 0)
+	else if (ft_strcmp(command->toke1[0], "export") == 0)
 		export_cmd(info_shell, command, env);
-	else if (ft_strcmp(command->toke1, "unset") == 0)
+	else if (ft_strcmp(command->toke1[0], "unset") == 0)
 		unset_cmd(info_shell, command);
 	else
 		execute_cmd(command, env);
