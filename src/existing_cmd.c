@@ -51,6 +51,7 @@ int	pwd_cmd(void)
 	cwd = getcwd(0, 0);
 	ft_putstr(cwd);
 	ft_putstr("\n");
+	free(cwd);
 	return (0);
 }
 

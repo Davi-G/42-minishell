@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:39:50 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/18 16:37:49 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/19 17:57:18 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,12 @@ int	execute_cmd(t_data *info, char **env)
 	command = malloc(sizeof(char *) * 10);
 	path_finder(env, info);
 	command = unitary_command(info);
-	path = check_access(command, info->path_split);
+	if (ft_strchr(info->toke1, '/') != NULL)
+        path = ft_strdup(info->toke1);
+    else
+	{
+        path = check_access(command, info->path_split);
+	}
 	if (!path)
 	{
 		printf("minishell: %s: command not found\n", info->toke1);

@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/17 02:43:42 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/20 19:48:48 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,13 @@
 /*----<Structures>----*/
 typedef struct s_data
 {
-	char	*toke1;
-	char	*toke2;
+	char	**toke1;
+	char	**toke2;
 	char	**toke3;
 	char 	**path_split;
-	char 	quote;
+	char 	*quote;
+	int		q_s;
+	int		q_d;
 	int		i;
 	int		j;
 	int		x;
