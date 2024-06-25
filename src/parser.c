@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/20 22:14:09 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/25 17:11:23 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,61 +76,33 @@ static void quote_type(char *str, t_data *data)
 	free(quote);
 }
 
-static	char	first_quote(char *str)
+static	char*	remove_quotes(char *str, t_data *data)
 {
-	int i;
-	int j;
-	//int k;
 	char quote;
-
-	i = 0;
-	j = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if (str[i] == '\"' || str[i] == '\'')
-		{
-			quote = str[i];
-			break ;
-		}
-		i++;
-	}
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == quote)
-		{
-			quote = str[i];
-			j++;
-			if (j == 2)
-				break ;
-		}
-		i++;
-	}
-	return (quote);
-}
-
-static	void	remove_quotes(char *str, t_data *data)
-{
-	int i;
-	int j;
-	//int k;
 	char *aux;
 
-	i = 0;
-	j = 0;
-//	k = 0;
-	(void)data;
+	data->i = 0;
+	data->j = 0;
+	quote = 0;
 	aux = calloc(ft_strlen(str), sizeof(char));
-	while (str[i])
+	while (str[data->i])
 	{
-		if (str[i] == first_quote(str))
-			i++;
-		aux[j] = str[i];
-		j++;
-		i++;
+		while (str[data->i] == '\"' || str[data->i] == '\'')
+		{
+			if (str[data->i] == quote)
+			{
+				quote = 0;
+				data->i++;
+			}
+			else if (quote == 0)
+				quote = str[data->i++];
+			else
+				break;
+		}
+		aux[data->j++] = str[data->i++];
 	}
-	aux[j] = '\0';
+	aux[data->j] = '\0';
+	return (aux);
 }
 
 t_data	parser(char *str)
@@ -140,19 +112,24 @@ t_data	parser(char *str)
 	char	**split_pipe;
 	char	**split;
 
-	split_dot = ft_split(str, ';');
+	str = remove_quotes(str, &data);
 	data.i = 0;
+	split_dot = ft_split(str, ';');
 	while (split_dot[data.i])
+	{
+		
 		ft_printf("dot: %s\n", split_dot[data.i++]);
-	(void)split_pipe;
+	}
+	
+	split_pipe = ft_split(str, '|');
+	data.i = 0;
+	while (split_pipe[data.i])
+		ft_printf("pipe: %s\n", split_pipe[data.i++]);
 	(void)split;
 	data.i = 0;
 	data = ft_clean_toke(&data);
 	quote_type(str, &data);
-	ft_printf("data.quote: %s\n", data.quote);
-	ft_printf("data.q_d: %d\n", data.q_d);
-	ft_printf("data.q_s: %d\n", data.q_s);
-	remove_quotes(str, &data);
+	ft_printf("str: %s\n", str);
 	return (data);
 }
 
