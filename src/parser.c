@@ -6,17 +6,17 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/26 17:54:59 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/26 22:40:21 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_data	ft_clean_toke(t_data *info)
+static t_data	ft_clean_toke(t_data *data)
 {
-	info->error = 0;
-	info->quote = 0;
-	return (*info);
+	data->error = 0;
+	data->quote = 0;
+	return (*data);
 }
 
 int	is_ignore(char *str, int i)
@@ -48,7 +48,16 @@ static int	is_sep(char *str, int i, char quote)
 
 static	char	*spaces(char *str, t_data *data, char *aux)
 {
-	if (str[data->i] == '$' && data->quote == 0 && str[data->i - 1] != '\\')
+	if (str[data->i] == '$' && data->quote == '\"')
+	{
+		aux[data->j++] = (char)-str[data->i++];
+		if (str[data->i] == '\"')
+		{
+			data->i++;
+			data->quote = 0;
+		}
+	}
+	else if (str[data->i] == '$' && data->quote == 0 && str[data->i - 1] != '\\')
 		aux[data->j++] = (char)(-str[data->i++]);
 	else if (data->quote == 0 && is_sep(str, data->i, data->quote))
 	{
@@ -75,13 +84,13 @@ static	char*	remove_quotes(char *str, t_data *data)
 	{
 		while (str[data->i] == '\"' || str[data->i] == '\'')
 		{
-			if (str[data->i] == data->quote)
+			if (data->quote == 0)
+				data->quote = str[data->i++];
+			else if (str[data->i] == data->quote)
 			{
 				data->quote = 0;
 				data->i++;
 			}
-			else if (data->quote == 0)
-				data->quote = str[data->i++];
 			else
 				break;
 		}
@@ -96,11 +105,19 @@ void	argument_type(t_data *data, int	sep)
 {
 	if (ft_strcmp(data->toke, "") == 0)
 		data->type = NONE;
+	else if (ft_strcmp(data->toke, ">") == 0 && sep == 0)
+		data->type = TRUNC;
+	else if (ft_strcmp(data->toke, ">>") == 0 && sep == 0)
+		data->type = APPEND;
+	else if (ft_strcmp(data->toke, "<") == 0 && sep == 0)
+		data->type = INPUT;
+	else if (ft_strcmp(data->toke, "<<") == 0 && sep == 0)
+		data->type = HEREDOC;
 	else if (ft_strcmp(data->toke, "|") == 0 && sep == 0)
 		data->type = PIPE;
 	else if (ft_strcmp(data->toke, ";") == 0 && sep == 0)
 		data->type = END;
-	else if (data->prev == NULL || data->prev->type >= PIPE)
+	else if (data->prev == NULL || data->prev->type >= TRUNC)
 		data->type = CMD;
 	else
 		data->type = ARG;
@@ -144,7 +161,7 @@ t_data	*next_toke(t_data *data, char *str)
 	return (new->toke[data->j] = '\0', new);
 }
 
-t_data	*set_toke(t_data *data, char *str)
+t_data	set_toke(t_data *data, char *str)
 {
 	t_data	*next;
 	t_data	*prev;
@@ -162,26 +179,43 @@ t_data	*set_toke(t_data *data, char *str)
 		if (prev)
 			prev->next = next;
 		prev = next;
-		argument_type(data, sep);
+		argument_type(next, sep);
 		is_space(str, &data->i);
-		ft_printf("prev: %s\n", prev->toke);
-		ft_printf("toke: %s\n", next->toke);
-		ft_printf("type: %d\n", data->type);
 	}
-	return (next);
+	if (next)
+		next->next = NULL;
+	while (next && next->prev)
+		next = next->prev;
+	return (*next);
 }
 
 t_data	parser(char *str)
 {
 	t_data	data;
+	char 	quote;
 
 	data = ft_clean_toke(&data);
 	str = remove_quotes(str, &data);
+	quote = data.quote;
+	data = set_toke(&data, str);
+	data.quote = quote;
 	if (data.quote != 0)
 		data.error = 1;
-	set_toke(&data, str);
-	ft_printf("str: %s\n", str);
+	//print_tokens(&data);
 	return (data);
+}
+
+void	print_tokens(t_data *data)
+{
+	t_data	*aux;
+
+	aux = data;
+	while (aux)
+	{
+		ft_printf("toke: %s\n", aux->toke);
+		ft_printf("type: %d\n", aux->type);
+		aux = aux->next;
+	}
 }
 
 //quote_type(str, &data);

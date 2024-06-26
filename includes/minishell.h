@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/26 17:28:10 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/26 22:29:42 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,12 @@
 # define NONE		0
 # define CMD		1
 # define ARG		2
-# define PIPE		3
-# define END		4
+# define TRUNC		3
+# define APPEND		4
+# define INPUT		5
+# define PIPE		6
+# define HEREDOC	7
+# define END		8
 
 /*----<Structures>----*/
 typedef struct s_data
@@ -91,8 +95,10 @@ int		ft_strlen_array_full(char **array);
 void	error(t_data *info);
 char	**unitary_command(t_data *info);
 int		is_ignore(char *str, int i);
-t_data	*set_toke(t_data *data, char *str);
+t_data	set_toke(t_data *data, char *str);
 t_data	*next_toke(t_data *data, char *str);
 void	is_space(char *str, int *i);
+
+void	print_tokens(t_data *data);
 
 #endif 
