@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/25 17:13:16 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/26 12:33:12 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	main(int ac, char **av, char **env)
 	t_data		info;
 
 	using_history();
+	(void)info;
 	control.exit_status = 0;
 	out = 0;
 	control.old_pwd = getcwd(0, 0);
@@ -89,9 +90,10 @@ int	main(int ac, char **av, char **env)
 		if (ft_strlen(out) > 0)
 			add_history(out);
 		info = parser(out);
-		if (info.error == 0 && info.toke1)
+	/* 	if (info.error == 0 && info.toke)
 			exe_existing_command(&info, &control, env);
 		else
+			*/
 			error(&info);
 	}
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/20 19:48:48 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:28:10 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,22 @@
 # define MAGENTA	"\x1B[35m"
 # define CYAN		"\x1B[36m"
 
+/*------>Types<------*/
+# define NONE		0
+# define CMD		1
+# define ARG		2
+# define PIPE		3
+# define END		4
+
 /*----<Structures>----*/
 typedef struct s_data
 {
-	char	**toke1;
-	char	**toke2;
-	char	**toke3;
+	char	*toke;
+	int		type;
+	struct	s_data	*next;
+	struct	s_data	*prev;
 	char 	**path_split;
-	char 	*quote;
-	int		q_s;
-	int		q_d;
+	char 	quote;
 	int		i;
 	int		j;
 	int		x;
@@ -80,9 +86,13 @@ void	free_array(char **array);
 void	ft_putstr(char *s);
 int		ft_strlen_array(char **array);
 char	**path_finder(char **env, t_data *info);
-int	execute_cmd(t_data *info, char **env);
+int		execute_cmd(t_data *info, char **env);
 int		ft_strlen_array_full(char **array);
 void	error(t_data *info);
 char	**unitary_command(t_data *info);
+int		is_ignore(char *str, int i);
+t_data	*set_toke(t_data *data, char *str);
+t_data	*next_toke(t_data *data, char *str);
+void	is_space(char *str, int *i);
 
 #endif 

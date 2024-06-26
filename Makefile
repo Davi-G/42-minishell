@@ -12,10 +12,11 @@ SRCS_DIR = ./src/
 SRCS = main.c \
 		parser.c \
 		utils.c \
-		command_finder.c \
-		existing_cmd.c \
-		execute_cmd.c \
 		error.c
+
+#command_finder.c \
+#execute_cmd.c \
+#existing_cmd.c \
 
 OBJS_DIR = ./obj/
 OBJS = $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
