@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/26 22:40:21 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/06/29 00:28:33 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ static	char	*spaces(char *str, t_data *data, char *aux)
 	if (str[data->i] == '$' && data->quote == '\"')
 	{
 		aux[data->j++] = (char)-str[data->i++];
-		if (str[data->i] == '\"')
+		if (str[data->x] == '\"')
 		{
-			data->i++;
+			data->x++;
 			data->quote = 0;
 		}
 	}
@@ -69,6 +69,7 @@ static	char	*spaces(char *str, t_data *data, char *aux)
 		aux[data->j++] = str[data->i++];
 		aux[data->j++] = ' ';
 	}
+	data->x++;
 	return (aux);
 }
 
@@ -79,17 +80,17 @@ static	char*	remove_quotes(char *str, t_data *data)
 	data->i = 0;
 	data->j = 0;
 	data->quote = 0;
-	aux = calloc(ft_strlen(str), sizeof(char));
+	aux = calloc(ft_strlen(str) + 10, sizeof(char));
 	while (str[data->i])
 	{
-		while (str[data->i] == '\"' || str[data->i] == '\'')
+		while (str[data->x] == '\"' || str[data->x] == '\'')
 		{
 			if (data->quote == 0)
-				data->quote = str[data->i++];
-			else if (str[data->i] == data->quote)
+				data->quote = str[data->x++];
+			else if (str[data->x] == data->quote)
 			{
 				data->quote = 0;
-				data->i++;
+				data->x++;
 			}
 			else
 				break;
@@ -153,12 +154,20 @@ t_data	*next_toke(t_data *data, char *str)
 		return (NULL);
 	while (str[data->i] && (str[data->i] != ' ' || c != ' '))
 	{
-		if (str[data->i] == '\\' && data->i++)
+		if (c == ' ' && (str[data->i] == '\'' || str[data->i] == '\"'))
+			c = str[data->i++];
+		else if (c != ' ' && str[data->i] == c)
+		{
+			c = ' ';
+			data->i++;
+		}
+		else if (str[data->i] == '\\' && data->i++)
 			new->toke[data->j++] = str[data->i++];
 		else
 			new->toke[data->j++] = str[data->i++];
 	}
-	return (new->toke[data->j] = '\0', new);
+	new->toke[data->j] = '\0';
+	return (new);
 }
 
 t_data	set_toke(t_data *data, char *str)
@@ -195,13 +204,17 @@ t_data	parser(char *str)
 	char 	quote;
 
 	data = ft_clean_toke(&data);
+	is_space(str, &data.i);
+	if (str[data.i] == '\0')
+		return (data);
+	data.x = -1;
 	str = remove_quotes(str, &data);
 	quote = data.quote;
 	data = set_toke(&data, str);
 	data.quote = quote;
 	if (data.quote != 0)
 		data.error = 1;
-	//print_tokens(&data);
+	print_tokens(&data);
 	return (data);
 }
 
@@ -217,160 +230,3 @@ void	print_tokens(t_data *data)
 		aux = aux->next;
 	}
 }
-
-//quote_type(str, &data);
-/*
-static int search_quotes(char *str, char type)
-{
-	int i;
-	int open;
-
-	open = 0;
-	i = 0;
-	while (str[i])
-		if (str[i++] == type)
-			open++;
-	return (open);
-}
-
-static int count_quotes(char *str)
-{
-	int i;
-	int quote;
-
-	i = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if (str[i] == '\"' || str[i] == '\'')
-			quote++;
-		i++;
-	}
-	return (quote);
-}
-
-static void quote_type(char *str, t_data *data)
-{
-	int i;
-	int k;
-	char *quote;
-	
-	quote = calloc(count_quotes(str), sizeof(char));
-	quote[0] = 0;
-	i = 0;
-	k = 0;
-	while (str[i])
-	{
-		if (str[i] == '\"' || str[i] == '\'')
-		{
-			quote[k] = str[i];
-			k++;
-		}
-		i++;
-	}
-	data->q_d = search_quotes(str, '\"');
-	data->q_s = search_quotes(str, '\'');
-	data->quote = ft_strdup(quote);
-	free(quote);
-}
-static void search_new(char *str, t_data *info, int pos, int tk)
-{
-	if (tk == 1)
-		info->toke1 = str;
-	else if (tk == 2)
-		info->toke2 = str;
-	else if (tk == 3)
-		info->toke3[pos] = str;
-	return ;
-} */
-
-/* static char	*remove_quotes(char *str, t_data *info, int pos, int tk)
-{
-	char *aux;
-	char quote;
-
-	quote = info->quote[0];
-	info->j = 0;
-	info->x = 0;
-	(void)pos;
-	(void)tk;
-	aux = calloc(ft_strlen(str), sizeof(char));
- 	if (tk == 3)
-		aux = calloc(ft_strlen(info->toke3[pos]), sizeof(char));
-	else if (tk == 1)
-		aux = calloc(ft_strlen(info->toke1), sizeof(char));
-	else if (tk == 2)
-		aux = calloc(ft_strlen(info->toke2), sizeof(char));
-	while (info->j < (int)ft_strlen(str))
-	{
-		if (quote == str[info->j])
-			info->j++;
-		aux[info->x++] = str[info->j];
-		info->j++;
-	}
-	if ((str[info->j] == '\"' || str[info->j] == '\''))
-		aux[info->x] = '\0';
-	aux[info->x++] = '\0';
-	return (aux);
-	//search_new(aux, info, pos, tk);
-} */
-
-
-/* 
-static void parse_2(t_data *info, char **split)
-{
-	int l;
-
-	info->j = 0;
-	info->toke3 = calloc(ft_strlen_array(split), sizeof(char *));
-	while (info->i <= ft_strlen_array(split) - 1)
-		info->toke3[info->j++] = split[info->i++];
-	if (ft_strcmp(info->toke3[0], "..") == 0)
-		return ;
-	info->i = 0;
-	l = 0;
-	while (info->i <= ft_strlen_array(info->toke3))
-	{
-		if (info->toke3[info->i] == NULL)
-			break ;
-		l += search_quotes(info->toke3[info->i], 2147483647, info);
-		if (l % 2 != 0 && info->toke3[info->i + 1] == NULL)
-		{
-			info->error = 1;
-			return ;
-		}
-		remove_quotes(info->toke3[info->i], info, info->i, 3);
-		info->i++;
-	}
-	return ;
-}
-
-t_data	parser(char *str)
-{
-	char	**split;
-	t_data	data;
-
-	data = ft_clean_toke(&data);
-	split = ft_split(str, ' ');
-	if (split[0] == NULL)
-		return data;
-	data.toke1 = split[0];
-	if (search_quotes(split[0], 2147483647, &data) != 0)
-	{
-		data.error = 1;
-		return data;
-	}
-	else
-		remove_quotes(data.toke1, &data, 0, 1);
-	data.quote = 0;
-	data.i = 1;
-	if (split[1] != NULL && split[1][0] == '-')
-		data.toke2 = ft_strdup(split[1]);
-	if (split[1] != NULL && split[1][0] == '-')
-		data.i = 2;
-	if (ft_strlen_array(split) > 1 && split[data.i] != NULL)
-		parse_2(&data, split);
-	free_array(split);
-	return (data);
-}
-*/
