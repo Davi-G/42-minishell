@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_finder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 14:52:45 by sergisan          #+#    #+#             */
-/*   Updated: 2024/06/17 16:07:54 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/07/08 16:58:32 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,23 @@
 
 int	exe_existing_command(t_data *command, t_master *info_shell, char **env)
 {
-	if (ft_strcmp(command->toke1, "echo") == 0)
-		return (echo_cmd(command));
-	else if (ft_strcmp(command->toke1, "pwd") == 0)
+	if (ft_strcmp(command->toke, "echo") == 0)
+		return (echo_cmd(info_shell, command));
+	else if (ft_strcmp(command->toke, "pwd") == 0)
 		return (pwd_cmd());
-	else if (ft_strcmp(command->toke1, "cd") == 0)
+	 else if (ft_strcmp(command->toke, "cd") == 0)
 		return (cd_cmd(info_shell, command));
-	else if (ft_strcmp(command->toke1, "env") == 0)
+	else if (ft_strcmp(command->toke, "env") == 0)
 		env_cmd(info_shell);
-	else if (ft_strcmp(command->toke1, "exit") == 0)
+	else if (ft_strcmp(command->toke, "exit") == 0)
 		return (exit_cmd(command, info_shell));
-	else if (ft_strcmp(command->toke1, "export") == 0)
-		export_cmd(info_shell, command, env);
-	else if (ft_strcmp(command->toke1, "unset") == 0)
+	else if (ft_strcmp(command->toke, "export") == 0)
+		export_cmd(info_shell, command);
+	else if (ft_strcmp(command->toke, "unset") == 0)
 		unset_cmd(info_shell, command);
 	else
-	{
-		printf("executing command %d \n", execute_cmd(command, env));
-	}
+		exe_cmd(info_shell, command, env);
+	while (command && command->type != PIPE && command->type != TRUNC && command->type != APPEND && command->type != END)
+		command = command->next;
 	return (0);
 }

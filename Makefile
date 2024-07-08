@@ -13,8 +13,8 @@ SRCS = main.c \
 		parser.c \
 		utils.c \
 		command_finder.c \
-		existing_cmd.c \
 		execute_cmd.c \
+		existing_cmd.c \
 		error.c
 
 OBJS_DIR = ./obj/

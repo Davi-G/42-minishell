@@ -1,3 +1,6 @@
 .DS_Store
 obj
 .vscode/settings.json
+packages.microsoft.gpg
+42-libft/libft.a
+minishell

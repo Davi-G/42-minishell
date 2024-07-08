@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:12:39 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/06 11:53:25 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:27:37 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ int	ft_strcmp(char *str1, char *str2)
 	i = 0;
 	if (!str1 || !str2)
 		return (1);
-	while (str1[i] && str2[i])
+	while (str1[i] == str2[i])
 	{
-		if (str1[i] != str2[i] || ft_strlen(str1) != ft_strlen(str2))
-			return (1);
+		if (str1[i] == '\0' && str2[i] == '\0')
+			return (0);
 		i++;
 	}
-	return (0);
+	return ((unsigned char)str1[i] - (unsigned char)str2[i]);
 }
 
 int	is_numeric(char *argv)
@@ -94,4 +94,11 @@ int	ft_strlen_array_full(char **array)
 		i++;
 	}
 	return (i + k - 1);
+}
+
+void	is_space(char *str, int *i)
+{
+	while ((str[*i] == ' ' || str[*i] == '\t')
+			|| (str[*i] == '\r' || str[*i] == '\v' || str[*i] == '\f'))
+		(*i)++;
 }
