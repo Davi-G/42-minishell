@@ -6,15 +6,15 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/29 00:28:33 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 15:53:25 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_data	ft_clean_toke(t_data *data)
+static t_data	ft_clean_toke(t_master *info_shell, t_data *data)
 {
-	data->error = 0;
+	info_shell->error = 0;
 	data->quote = 0;
 	return (*data);
 }
@@ -198,12 +198,12 @@ t_data	set_toke(t_data *data, char *str)
 	return (*next);
 }
 
-t_data	parser(char *str)
+t_data	parser(char *str, t_master *info_shell)
 {
 	t_data	data;
 	char 	quote;
 
-	data = ft_clean_toke(&data);
+	data = ft_clean_toke(info_shell, &data);
 	is_space(str, &data.i);
 	if (str[data.i] == '\0')
 		return (data);
@@ -213,7 +213,7 @@ t_data	parser(char *str)
 	data = set_toke(&data, str);
 	data.quote = quote;
 	if (data.quote != 0)
-		data.error = 1;
+		info_shell->error = 1;
 	print_tokens(&data);
 	return (data);
 }

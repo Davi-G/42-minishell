@@ -15,32 +15,64 @@
 
 #include "minishell.h"
 
+//actualmente "funciona"
+//mete un salto de linea por la cara
+//si el $?esta en medio deuna palabra no funciona jajajaj salu2
 
-int	echo_cmd(t_data *info)
+int	check_boolean(t_data *info)
+{
+	t_data *current;
+	char	*token;
+	int		i;
+
+	current = info;
+	i = 1;
+	if (current && current->toke)
+    {
+        token = current->toke;
+        while (token[i])
+		{
+			if (token[0] == '-' && token[1] == 'n' && token[i] == 'n')
+				i++;
+			else
+				return (0);
+		}
+    }
+	return (1);
+}
+
+int echo_cmd(t_master *info_shell, t_data *info)
 {
 	int n_boolean;
-	int i;
+	t_data *current;
 
-	i = 0;
-	n_boolean = 0;
-	if (ft_strcmp(info->toke2[0], "-n") == 0)
-		n_boolean = 1;
-	if (!info->toke3)
+	if (!info || !info->next)
 	{
 		ft_putstr("\n");
-		return (1);
+		return (0);
 	}
-	while (info->toke3[i])
+	n_boolean = 0;
+	current = info->next;
+	n_boolean = check_boolean(current);
+	if (current && !current->next && n_boolean)
+        return (0);
+	if (n_boolean)
+		current = current->next;
+	while (current->next)
 	{
-		ft_putstr(info->toke3[i]);
-		if (ft_strlen_array(info->toke3) > 1 && i < ft_strlen_array(info->toke3)
-			- 1)
-			write(1, " ", 1);
-		i++;
+		if (current->toke)
+		{
+			if (ft_strcmp(current->toke, "$?") == 0)
+				ft_printf("%i", info_shell->exit_status);
+			else
+				ft_putstr(current->toke);
+		}
+		current = current->next;
+		write(1, " ", 1);
 	}
-	if (n_boolean == 1)
-		write(1, "%", 1);
-	write(1, "\n", 1);
+	if (!n_boolean)
+		ft_putstr("\n");
+	ft_putstr("\n");
 	return (0);
 }
 
@@ -54,63 +86,68 @@ int	pwd_cmd(void)
 	free(cwd);
 	return (0);
 }
-
-int	exit_cmd(t_data *command, t_master *minishell)
+int	exit_cmd(t_data *current, t_master *minishell)
 {
-	if (!command->toke3)
+	if (!(current->next) || current->next->type != 2)
 	{
 		minishell->exit_status = 1;
 		return (0);
 	}
-	else if (command->toke1 && command->toke3[0] && command->toke3[1])
+	else if (current->next && current->next->type == 2 && current->next->next && current->next->next->type == 2)
 	{
 		ft_putstr("minishell: exit: too many arguments\n");
 		return (1);
 	}
-	else if (command->toke1 && command->toke3[0]
-		&& is_numeric(command->toke3[0]) == 1)
+	else if (current->next && current->next->type == 2
+		&& is_numeric(current->next->toke) == 1)
 	{
-		// comprobar si es necesario que sea numerico o es valido com palabras
+		//No debe salir normal con palabras (num 2). El exit dara codigo de 2, aunque saldrá
 		ft_putstr("minishell: exit: numeric argument required\n");
-		return (255);
+		return (2);
 	}
-	else if (command->toke3[0])
+	else if (current->next->type == 2)
 	{
 		minishell->exit_status = 1;
-		return (ft_atoi(command->toke3[0]));
+		return (ft_atoi(current->next->toke));
 	}
 	return (0);
 }
 
-void	initialize_env(t_master *info_shell, t_data *command, char **envp)
+void	initialize_env(t_master *info_shell, char **envp)
 {
-	info_shell->i = 0;
+	int	i;
 
-	while (envp[info_shell->i])
-		info_shell->i++;
-	info_shell->env = ft_calloc((info_shell->i) + 1, sizeof(char *));
-	info_shell->i = 0;
+	i = 0;
+	while (envp[i])
+		i++;
+	info_shell->env = ft_calloc(i + 1, sizeof(char *));
 	if (!info_shell->env)
 	{
 		ft_putstr("Error: calloc fail\n");
-		command->error = 1;
+		info_shell->error = 1;
 		return ;
 	}
-	while (envp[info_shell->i])
+	i = 0;
+	while (envp[i])
 	{
-		info_shell->env[info_shell->i] = ft_strdup(envp[info_shell->i]);
-		info_shell->i++;
+		info_shell->env[i] = ft_strdup(envp[i]);
+		i++;
 	}
-	info_shell->i = 0;
 }
 
 int	env_cmd(t_master *info_shell)
 {
 	int i;
+	int	arr_length;
 
 	i = 0;
+	arr_length = ft_strlen_array(info_shell->env);
 	while (info_shell->env[i] && info_shell->env[i][0] != '\0')
-		printf("%s\n", info_shell->env[i++]);
+	{
+		if (i < (arr_length - info_shell->exported_vars))
+			printf("%s\n", info_shell->env[i]);
+		i++;
+	}
 	return (0);
 }
 
@@ -136,7 +173,7 @@ static void	actualize_env(t_master *info_shell)
 		i++;
 	}
 }
-
+/* 
 static int	try_prev_dir(t_master *info_shell, char *full_route)
 {
 	char *final_route;
@@ -155,57 +192,95 @@ static int	try_prev_dir(t_master *info_shell, char *full_route)
 	actualize_env(info_shell);
 	return (0);
 }
-
-static int	try_change_dir(t_master *info_shell, t_data *command, char *pwd)
+*/
+static int	try_change_dir(t_master *info_shell, char *route, char *pwd)
 {
-	if (chdir(command->toke3[0]) == -1)
+	if (chdir(route) == -1)
 	{
-		printf("cd: No such file or directory: %s\n", command->toke3[0]);
+		printf("cd: No such file or directory: %s\n", route);
 		return (1);
 	}
+	//free(info_shell->new_pwd);
+	//free(info_shell->old_pwd);
 	info_shell->new_pwd = getcwd(0, 0);
 	info_shell->old_pwd = ft_strdup(pwd);
+	free(pwd);
 	actualize_env(info_shell);
 	return (0);
 }
-
-int	cd_cmd(t_master *info_shell, t_data *command)
+//Si no hay nada, o el que hay detras es != 2 (ARG) -> chdir(getenv("HOME"));
+//Si si hay algo, hay que diferenciarlos
+//Si hay 2 argumentos tras el cd y los dos son arg, toomanyarguments
+int	cd_cmd(t_master *info_shell, t_data *current)
 {
 	char *aux;
 
 	aux = NULL;
-	if (!command->toke3 && !command->toke2)
-	{
-		actualize_env(info_shell);
+	if (!(current->next))
 		chdir(getenv("HOME"));
-	}
-	else if (command->toke2[0] && ft_strcmp(command->toke2[0], "-") == 0)
+	else if (current->next->type == 2 && ft_strcmp(current->next->toke, "-") == 0)
 	{
+		//El if esta porque si el directorio al que entra es el home, entonces imprime la virgulilla
+		//Si no, imprime el directorio al que entra
+		//Tambien habra que liberar aux, old_pwd (puesto que se iguala) y tambien new_pwd antes de igualarlo de nuevo
 		aux = getcwd(0, 0);
-		if (chdir(info_shell->old_pwd) == -1)
-		{
-			ft_putstr("minishell: cd: OLDPWD not set\n");
-			return (1);
-		}
-		info_shell->old_pwd = aux;
+		chdir(info_shell->old_pwd);
+		free(info_shell->old_pwd);
+		free(info_shell->new_pwd);
+		info_shell->old_pwd = ft_strdup(aux);
 		info_shell->new_pwd = getcwd(0, 0);
+		free (aux);
 		actualize_env(info_shell);
-		printf("%s\n", info_shell->old_pwd);
+		if (ft_strcmp(info_shell->new_pwd, getenv("HOME")) != 0)
+			printf("%s\n", info_shell->new_pwd);
+		else
+			ft_putstr("~");
 	}
-	else if (command->toke3[0][0] == '.' && command->toke3[0][1] == '.'
-		&& command->toke3[0][2] == '\0')
-	{
-		info_shell->old_pwd = getcwd(0, 0);
-		return (try_prev_dir(info_shell, getcwd(0, 0)));
-	}
-	else if (command->toke3[1])
-	{
-		ft_putstr("minishell: cd: too many arguments\n");
-		return (1);
-	}
-	else
-		return (try_change_dir(info_shell, command, getcwd(0, 0)));
+	else if (!current->next->next)
+		return(try_change_dir(info_shell, current->next->toke, getcwd(0, 0)));
 	return (0);
+}
+
+void	ft_swap_arr(char **a, char **b)
+{
+    char *temp;
+
+	temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+char **env_sorter(char **env, int i, int length)
+{
+    int checker;
+    char **env_copy;
+
+    length = ft_strlen_array(env);
+    env_copy = (char **)malloc(sizeof(char *) * (length + 1));
+    while (i < length)
+	{
+		env_copy[i] = ft_strdup(env[i]);
+		i++;
+	}
+    env_copy[length] = NULL;
+    checker = 0;
+    while (checker == 0)
+	{
+        i = 0;
+        checker = 1;
+        while (i < length - 1)
+		{
+            if (ft_strcmp(env_copy[i], env_copy[i + 1]) > 0)
+			{
+                ft_swap_arr(&env_copy[i], &env_copy[i + 1]);
+				i = 0;
+                checker = 0;
+            }
+            i++;
+        }
+        length--;
+    }
+    return (env_copy);
 }
 
 static void	*ft_realloc(void *ptr, size_t current_size, size_t new_size)
@@ -225,87 +300,144 @@ static void	*ft_realloc(void *ptr, size_t current_size, size_t new_size)
 		if (new_ptr)
 		{
 			ft_memcpy(new_ptr, ptr, current_size);
-			// free(ptr);
+			//free(ptr);
 		}
 		return (new_ptr);
 	}
 }
 
-t_master	*add_env_var(t_master *info_shell, char *var)
+int ft_strcmp_until(char *str1, char *str2, char c)
 {
+    int i;
+
+	i = 0;
+    while (str1[i] && str2[i] && str1[i] != c && str2[i] != c)
+	{
+        if (str1[i] != str2[i])
+            return (1);
+        i++;
+    }
+    if ((str1[i] == c && str2[i] == c))
+        return (2);
+	else if ((str1[i] == '\0' && str2[i] == '\0') || str1[i] != str2[i])
+		return (2);
+    return (0);
+}
+
+char **add_env_var(t_master *info_shell, char *var)
+{
+	char	**aux;
+    int 	i;
+	int		var_length;
+
+    i = 0;
+	var_length = ft_strlen_until(var, '=');
+    while (info_shell->env[i])
+	{
+        if (ft_strlen_until(info_shell->env[i], '=') == var_length)
+		{
+			if (ft_strncmp(info_shell->env[i], var, var_length) == 0)
+			{
+            	free(info_shell->env[i]);
+            	info_shell->env[i] = ft_strdup(var);
+            	return (info_shell->env);
+			}
+		}
+        i++;
+    }
+    aux = ft_realloc(info_shell->env, sizeof(char *) * (i + 1), sizeof(char *) * (i + 2));
+    if (!aux)
+	{
+        return (NULL);
+	}
+	info_shell->env = aux;
+    info_shell->env[i] = ft_strdup(var);
+    info_shell->env[i + 1] = NULL;
+	info_shell->exported_vars++;
+    return (info_shell->env);
+}
+//El free_array comentado es por que lo se que se pasa no es una copia, sino la original
+//Quiero entender que si
+//En mi wsl cuando haces export de una variable (por ejemplo export hola) se genera hola=''
+//En este export no, falta probar que ocurre en 42
+void	export_cmd(t_master *info_shell, t_data *current)
+{
+	int 	i;
+	char	**var;
+
+	i = 0;
+	current = current->next;
+	if (current == NULL || current->type != 2)
+	{
+		var = env_sorter(info_shell->env, 0, 0);
+		while (var[i])
+			ft_printf("declare -x %s\n", var[i++]);
+		//free_array(var);
+		return ;
+	}
+	while (current && current->toke)
+	{
+ 		if (current->type == 2)
+			info_shell->env = add_env_var(info_shell, current->toke);
+		current = current->next;
+	}
+}
+
+int	ft_strlen_until(char *str, char c)
+{
+	int i;
+
+	i = 0;
+	while (str[i] && str[i] != c)
+		i++;
+	return (i);
+}
+
+void	delete_envp_single_var(t_master *info_shell, t_data *current)
+{
+	int	env_var_length;
+	int	curr_var_length;
 	int i;
 
 	i = 0;
 	while (info_shell->env[i])
 	{
-		if (ft_strncmp(info_shell->env[i], var, ft_strlen(var)) == 0)
+		env_var_length = ft_strlen_until(info_shell->env[i], '=');
+		curr_var_length = ft_strlen_until(current->toke, '=');
+		if (env_var_length == curr_var_length)
 		{
-			// free(info_shell->env[i]);
-			info_shell->env[i] = ft_strdup(var);
-			return (info_shell);
+			if (ft_strncmp(info_shell->env[i], current->toke, env_var_length) == 0)
+			{
+				while (info_shell->env[i])
+				{
+					info_shell->env[i] = info_shell->env[i + 1];
+					i++;
+				}
+				break;
+			}
 		}
 		i++;
 	}
-	info_shell->env = ft_realloc(info_shell->env, sizeof(char *) * (i + 1),
-			sizeof(char *) * (i + 2));
-	if (!info_shell->env)
-		return (info_shell);
-	info_shell->env[i] = var;
-	printf("El valor de info_Shell->[i] es %s\n", info_shell->env[i]);
-	info_shell->env[i + 1] = NULL;
-	return (info_shell);
 }
 
-void	export_cmd(t_master *info_shell, t_data *command, char **env)
+void	unset_cmd(t_master *info_shell, t_data *current)
 {
-	int i;
-
-	(void)env;
-	i = 0;
-	if (!command->toke3)
+	current = current->next;
+	if (current == NULL || current->toke == NULL)
 	{
-		// En verdad no es asi porque el env o export imprime tambien las funciones
-		env_cmd(info_shell);
+		ft_putstr("minishell: unset: not enough arguments\n");
 		return ;
 	}
-	i = 0;
-	while (command->toke3[i])
+	while (current != NULL && current->type == 2)
 	{
-		if (command->toke3[i][0] == '=')
-			printf("minishell: export: not a valid identifier %s\n",
-				command->toke3[i]);
+		if (ft_strchr(current->toke, '=') != NULL)
+			printf("minishell: unset: `%s': not a valid identifier\n", current->toke);
 		else
-			info_shell = add_env_var(info_shell, command->toke3[i]);
-		i++;
+			delete_envp_single_var(info_shell, current);
+		current = current->next;
 	}
 }
-
-static char	**delete_envp_single_var(char **envp, char *var)
-{
-	int i;
-	int j;
-	char **aux_envp;
-
-	i = 0;
-	j = 0;
-	while (envp[i])
-		i++;
-	aux_envp = ft_calloc(i, sizeof(char *));
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strcmp(envp[i], var) != 0)
-		{
-			aux_envp[j] = ft_strdup(envp[i]);
-			j++;
-		}
-		i++;
-	}
-	aux_envp[j] = "\0";
-	free_array(envp);
-	return (aux_envp);
-}
-
+/*
 static int	ft_strlen_array_j(char **array)
 {
 	int i;
@@ -325,51 +457,4 @@ static int	ft_strlen_array_j(char **array)
 	}
 	return (k);
 }
-
-void	unset_cmd(t_master *info_shell, t_data *command)
-{
-	int i;
-	int j;
-	char **aux;
-
-	i = 0;
-	j = 0;
-	aux = NULL;
-	(void)i;
-	command->i = 0;
-	command->j = 0;
-	if (!command->toke3)
-	{
-		ft_putstr("minishell: unset: not enough arguments\n");
-		return ;
-	}
-	aux = ft_calloc(ft_strlen_array(info_shell->env), sizeof(char *) + 1);
-	while (command->toke3[command->i])
-	{
-		command->j = 0;
-		if (ft_strchr(command->toke3[command->i], '=') != NULL)
-			printf("minishell: unset: `%s': not a valid identifier\n",
-				command->toke3[command->i]);
-		else
-		{
-			i = ft_strlen_array_j(info_shell->env)
-				- ft_strlen(command->toke3[command->i]);
-			while (info_shell->env[command->j]
-				&& ft_strcmp(info_shell->env[command->j],
-					command->toke3[command->i]) != 0)
-			{
-				aux[j] = ft_strdup(info_shell->env[command->j]);
-				j++;
-				command->j++;
-			}
-			aux[j] = calloc(i, sizeof(char) + 1);
-			if (info_shell->env[command->j])
-			{
-				free(info_shell->env);
-				aux = delete_envp_single_var(aux, command->toke3[command->i]);
-			}
-		}
-		command->i++;
-	}
-	info_shell->env = aux;
-}
+*/

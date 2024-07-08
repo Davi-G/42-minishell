@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 16:54:34 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/06 11:53:14 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/07/08 15:55:51 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static void	error_msg(char *msg)
 	ft_putstr("\n");
 }
 
-void   error(t_data *info)
+void   error(t_master *info_shell)
 {
 	char *msg;
 	
 	msg = NULL;
-	if (info->error == 1)
+	if (info_shell->error == 1)
 		msg = "minishell: syntax error with open quotes";
 	error_msg(msg);
 }

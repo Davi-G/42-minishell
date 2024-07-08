@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/26 19:51:39 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 16:12:50 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static void	initialize_env(t_master *info_shell, char **env)
 	int	i;
 
 	i = 0;
+	info_shell->exported_vars = 0;
 	while (env[i])
 		i++;
 	info_shell->env = ft_calloc(i + 1, sizeof(char *));
@@ -69,6 +70,24 @@ static char *set_home(char *home)
 	return (home);
 }
 
+void	ctrl_c(int sig)
+{
+	(void)sig;
+    ft_putstr("\n");
+    rl_on_new_line();
+	rl_replace_line("", 0);
+    rl_redisplay();
+}
+
+void	handle_eof(char *input)
+{
+    if (!input)
+	{
+        ft_putstr("Exiting minishell\n");
+        exit(0);
+    }
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char		*out;
@@ -84,17 +103,18 @@ int	main(int ac, char **av, char **env)
 	initialize_env(&control, env);
 	while (control.exit_status != 1 && ac == 1 && av[0])
 	{
+		signal(SIGINT, ctrl_c);
 		home = set_home(home);
 		out = readline(home);
+		handle_eof(out);
 		free(home);
 		if (ft_strlen(out) > 0)
 			add_history(out);
-		info = parser(out);
-	/* 	if (info.error == 0 && info.toke)
-			exe_existing_command(&info, &control, env);
+		info = parser(out, &control);
+		if (control.error == 0 && info.toke)
+			while_commands(&control, &info);
 		else
-			*/
-			error(&info);
+			error(&control);
 	}
 	return (0);
 }
