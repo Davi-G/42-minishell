@@ -58,7 +58,7 @@ int echo_cmd(t_master *info_shell, t_data *info)
         return (0);
 	if (n_boolean)
 		current = current->next;
-	while (current->next)
+	while (current)
 	{
 		if (current->toke)
 		{
@@ -72,7 +72,11 @@ int echo_cmd(t_master *info_shell, t_data *info)
 	}
 	if (!n_boolean)
 		ft_putstr("\n");
-	ft_putstr("\n");
+	else
+	{
+		ft_putstr("%");
+		ft_putstr("\n");
+	}
 	return (0);
 }
 
@@ -232,9 +236,10 @@ int	cd_cmd(t_master *info_shell, t_data *current)
 		free (aux);
 		actualize_env(info_shell);
 		if (ft_strcmp(info_shell->new_pwd, getenv("HOME")) != 0)
-			printf("%s\n", info_shell->new_pwd);
+			ft_printf("%s\n", info_shell->new_pwd);
 		else
-			ft_putstr("~");
+			ft_printf("%s\n", info_shell->new_pwd);
+			//ft_putstr("~");
 	}
 	else if (!current->next->next)
 		return(try_change_dir(info_shell, current->next->toke, getcwd(0, 0)));

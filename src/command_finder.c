@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 14:52:45 by sergisan          #+#    #+#             */
-/*   Updated: 2024/07/08 15:54:57 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 16:58:32 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	exe_existing_command(t_data *command, t_master *info_shell, char **env)
 	else if (ft_strcmp(command->toke, "pwd") == 0)
 		return (pwd_cmd());
 	 else if (ft_strcmp(command->toke, "cd") == 0)
-		return (cd_cmd(info_shell, command)); //segfault siempre
+		return (cd_cmd(info_shell, command));
 	else if (ft_strcmp(command->toke, "env") == 0)
 		env_cmd(info_shell);
 	else if (ft_strcmp(command->toke, "exit") == 0)

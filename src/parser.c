@@ -6,14 +6,29 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 15:53:25 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 16:56:48 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static void	del_toke(t_data *data)
+{
+	t_data	*aux;
+
+	while (data)
+	{
+		aux = data->next;
+		free(data->toke);
+	//	free(data);
+		data = aux;
+	}
+}
+
 static t_data	ft_clean_toke(t_master *info_shell, t_data *data)
 {
+	if (data->toke)
+		del_toke(data);
 	info_shell->error = 0;
 	data->quote = 0;
 	return (*data);
@@ -214,7 +229,7 @@ t_data	parser(char *str, t_master *info_shell)
 	data.quote = quote;
 	if (data.quote != 0)
 		info_shell->error = 1;
-	print_tokens(&data);
+	//print_tokens(&data);
 	return (data);
 }
 

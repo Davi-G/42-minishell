@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 16:12:50 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 18:12:41 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static char	*home_finder(char *old_pwd, char *home)
 
 	i = 0;
 	home = NULL;
-	old_pwd = getcwd(0, 0);
 	while (old_pwd[i])
 		i++;
 	j = i;
@@ -56,17 +55,23 @@ static char	*home_finder(char *old_pwd, char *home)
 		i++;
 		j++;
 	}
-	home[j] = '-';
-	home[j + 1] = '>';
-	home[j + 2] = '\0';
+	home[j] = '/';
+	home[j + 1] = '\0';
 	return (home);
 }
 
 static char *set_home(char *home)
 {
-	home = home_finder(getcwd(0, 0), home);
+	char	*aux;
+
+	aux = getcwd(0, 0);
+	if (!ft_strcmp(aux, getenv("HOME")))
+		home = ft_strdup("~");
+	else
+		home = home_finder(aux, home);
 	home = ft_strjoin(MAGENTA, home);
 	home = ft_strjoin(home, RESET);
+	free(aux);
 	return (home);
 }
 
@@ -75,7 +80,7 @@ void	ctrl_c(int sig)
 	(void)sig;
     ft_putstr("\n");
     rl_on_new_line();
-	rl_replace_line("", 0);
+//	rl_replace_line("", 0);
     rl_redisplay();
 }
 
@@ -96,10 +101,10 @@ int	main(int ac, char **av, char **env)
 	t_data		info;
 
 	using_history();
-	(void)info;
 	control.exit_status = 0;
 	out = 0;
 	control.old_pwd = getcwd(0, 0);
+	control.new_pwd = getcwd(0, 0);
 	initialize_env(&control, env);
 	while (control.exit_status != 1 && ac == 1 && av[0])
 	{

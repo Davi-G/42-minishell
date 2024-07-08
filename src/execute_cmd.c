@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:39:50 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 15:56:23 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 16:27:08 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ char *path_finder(char *command, char **env)
     int i;
 
 	i = 0;
+	result = NULL;
     while (env[i])
 	{
         if (ft_strncmp(env[i], "PATH=", 5) == 0)
