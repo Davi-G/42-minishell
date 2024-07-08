@@ -344,6 +344,8 @@ char **add_env_var(t_master *info_shell, char *var)
 			if (ft_strncmp(info_shell->env[i], var, var_length) == 0)
 			{
             	free(info_shell->env[i]);
+				if (ft_strchr(var, '=') && !var[var_length + 1])
+					var = ft_strjoin(var, "''");
             	info_shell->env[i] = ft_strdup(var);
             	return (info_shell->env);
 			}
@@ -356,11 +358,16 @@ char **add_env_var(t_master *info_shell, char *var)
         return (NULL);
 	}
 	info_shell->env = aux;
+	if (!ft_strchr(var, '='))
+		var = ft_strjoin(var, "=''");
+	else if (ft_strchr(var, '=') && !var[var_length + 1])
+		var = ft_strjoin(var, "''");
     info_shell->env[i] = ft_strdup(var);
     info_shell->env[i + 1] = NULL;
 	info_shell->exported_vars++;
     return (info_shell->env);
 }
+
 //El free_array comentado es por que lo se que se pasa no es una copia, sino la original
 //Quiero entender que si
 //En mi wsl cuando haces export de una variable (por ejemplo export hola) se genera hola=''

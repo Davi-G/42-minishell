@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 18:12:41 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 19:20:17 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ void	ctrl_c(int sig)
 	(void)sig;
     ft_putstr("\n");
     rl_on_new_line();
-//	rl_replace_line("", 0);
-    rl_redisplay();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 void	handle_eof(char *input)
