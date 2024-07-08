@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:12:39 by davi-g            #+#    #+#             */
-/*   Updated: 2024/06/26 17:27:37 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 19:35:10 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,31 +74,4 @@ int	ft_strlen_array(char **array)
 	while (array[i])
 		i++;
 	return (i);
-}
-
-int	ft_strlen_array_full(char **array)
-{
-	int	i;
-	int	j;
-	int	k;
-
-	i = 0;
-	j = 0;
-	k = 0;
-	while (array[i])
-	{
-		j = 0;
-		while (array[i][j])
-			j++;
-		k += j;
-		i++;
-	}
-	return (i + k - 1);
-}
-
-void	is_space(char *str, int *i)
-{
-	while ((str[*i] == ' ' || str[*i] == '\t')
-			|| (str[*i] == '\r' || str[*i] == '\v' || str[*i] == '\f'))
-		(*i)++;
 }

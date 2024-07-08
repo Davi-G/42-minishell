@@ -6,7 +6,7 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 15:52:13 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 19:42:55 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct s_master
 
 /*----<Functions>----*/
 t_data	parser(char *str, t_master *info_shell);
+void	init_info(t_data *info, t_master *control);
 int		exe_existing_command(t_data *info, t_master *minishell, char **env);
 int		cd_cmd(t_master *info_shell, t_data *command);
 int		echo_cmd(t_master *info_shell, t_data *info);
@@ -100,7 +101,15 @@ int		is_ignore(char *str, int i);
 t_data	set_toke(t_data *data, char *str);
 t_data	*next_toke(t_data *data, char *str);
 void	while_commands(t_master *info_shell, t_data *cmd);
+void	handle_eof(char *input);
+void	ctrl_c(int sig);
 void	is_space(char *str, int *i);
+t_data	ft_clean_toke(t_master *info_shell, t_data *data);
+void	del_toke(t_data *data);
+int	is_sep(char *str, int i, char quote);
+char	*spaces(char *str, t_data *data, char *aux);
+int	count_space(char *str, t_data *data);
+char*	remove_quotes(char *str, t_data *data);
 
 void	print_tokens(t_data *data);
 

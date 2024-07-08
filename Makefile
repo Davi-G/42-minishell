@@ -11,10 +11,13 @@ LDFLAGS = -L ./42-libft -lft -lreadline
 SRCS_DIR = ./src/
 SRCS = main.c \
 		parser.c \
+		parser1.c \
 		utils.c \
+		utils1.c \
 		command_finder.c \
 		execute_cmd.c \
 		existing_cmd.c \
+		signal \
 		error.c
 
 OBJS_DIR = ./obj/

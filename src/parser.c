@@ -6,89 +6,13 @@
 /*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 16:56:48 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 19:40:37 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	del_toke(t_data *data)
-{
-	t_data	*aux;
-
-	while (data)
-	{
-		aux = data->next;
-		free(data->toke);
-	//	free(data);
-		data = aux;
-	}
-}
-
-static t_data	ft_clean_toke(t_master *info_shell, t_data *data)
-{
-	if (data->toke)
-		del_toke(data);
-	info_shell->error = 0;
-	data->quote = 0;
-	return (*data);
-}
-
-int	is_ignore(char *str, int i)
-{
-	if (str[i] && str[i] == '\\' && str[i + 1] && str[i + 1] == ';')
-		return (1);
-	else if (str[i] && str[i] == '\\' && str[i + 1] && str[i + 1] == '|')
-		return (1);
-	else if (str[i] && str[i] == '\\' && str[i + 1] && str[i + 1] == '>')
-		return (1);
-	else if (str[i] && str[i] == '\\' && str[i + 1] && str[i + 1] == '>'
-		&& str[i + 2] && str[i + 2] == '>')
-		return (1);
-	else if (str[i] && str[i] == '\\' && str[i + 1] && str[i + 1] == '<'
-		&& str[i + 2] && str[i + 2] == '<')
-		return (1);
-	return (0);
-}
-
-static int	is_sep(char *str, int i, char quote)
-{
-	if (i > 0 && str[i - 1] == '\\' && ft_strchr("<>|;", str[i]))
-		return (0);
-	else if (ft_strchr("<>|;", str[i]) && quote == 0)
-		return (1);
-	else
-		return (0);
-}
-
-static	char	*spaces(char *str, t_data *data, char *aux)
-{
-	if (str[data->i] == '$' && data->quote == '\"')
-	{
-		aux[data->j++] = (char)-str[data->i++];
-		if (str[data->x] == '\"')
-		{
-			data->x++;
-			data->quote = 0;
-		}
-	}
-	else if (str[data->i] == '$' && data->quote == 0 && str[data->i - 1] != '\\')
-		aux[data->j++] = (char)(-str[data->i++]);
-	else if (data->quote == 0 && is_sep(str, data->i, data->quote))
-	{
-		aux[data->j++] = ' ';
-		aux[data->j++] = str[data->i++];
-		if (data->quote == 0 && str[data->i] == '>')
-			aux[data->j++] = str[data->i++];
-		if (data->quote == 0 && str[data->i] == '<')
-		aux[data->j++] = str[data->i++];
-		aux[data->j++] = ' ';
-	}
-	data->x++;
-	return (aux);
-}
-
-static	char*	remove_quotes(char *str, t_data *data)
+char*	remove_quotes(char *str, t_data *data)
 {
 	char *aux;
 
@@ -137,23 +61,6 @@ void	argument_type(t_data *data, int	sep)
 		data->type = CMD;
 	else
 		data->type = ARG;
-}
-
-static	int	count_space(char *str, t_data *data)
-{
-	int	i;
-	int	count;
-
-	i = data->i;
-	count = 0;
-	while (str[i] != ' ' && str[i])
-	{
-		count++;
-		if (str[i] == '\\')
-			count--;
-		i++;	
-	}
-	return (i - count);
 }
 
 t_data	*next_toke(t_data *data, char *str)
@@ -231,17 +138,4 @@ t_data	parser(char *str, t_master *info_shell)
 		info_shell->error = 1;
 	//print_tokens(&data);
 	return (data);
-}
-
-void	print_tokens(t_data *data)
-{
-	t_data	*aux;
-
-	aux = data;
-	while (aux)
-	{
-		ft_printf("toke: %s\n", aux->toke);
-		ft_printf("type: %d\n", aux->type);
-		aux = aux->next;
-	}
 }
