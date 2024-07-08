@@ -68,6 +68,7 @@ typedef struct s_master
 	char	*old_pwd;
 	char	*new_pwd;
 	char 	**env;
+	int		cmd_response;
 	int		exported_vars;
 	int 	error;
 	int		i;
@@ -102,7 +103,6 @@ t_data	set_toke(t_data *data, char *str);
 t_data	*next_toke(t_data *data, char *str);
 void	while_commands(t_master *info_shell, t_data *cmd);
 void	handle_eof(char *input);
-void	ctrl_c(int sig);
 void	is_space(char *str, int *i);
 t_data	ft_clean_toke(t_master *info_shell, t_data *data);
 void	del_toke(t_data *data);
@@ -110,7 +110,8 @@ int	is_sep(char *str, int i, char quote);
 char	*spaces(char *str, t_data *data, char *aux);
 int	count_space(char *str, t_data *data);
 char*	remove_quotes(char *str, t_data *data);
-
+void	ctrl_c(int sig);
 void	print_tokens(t_data *data);
 
+extern int global_response;
 #endif 
