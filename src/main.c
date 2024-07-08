@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 19:20:17 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/07/08 19:42:42 by davi-g           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,22 +75,20 @@ static char *set_home(char *home)
 	return (home);
 }
 
-void	ctrl_c(int sig)
+void	init_info(t_data *info, t_master *control)
 {
-	(void)sig;
-    ft_putstr("\n");
-    rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-void	handle_eof(char *input)
-{
-    if (!input)
-	{
-        ft_putstr("Exiting minishell\n");
-        exit(0);
-    }
+	info->toke = NULL;
+	info->type = 0;
+	info->next = NULL;
+	info->prev = NULL;
+	info->path_split = NULL;
+	info->quote = 0;
+	info->i = 0;
+	info->j = 0;
+	info->x = 0;
+	control->exit_status = 0;
+	control->old_pwd = getcwd(0, 0);
+	control->new_pwd = getcwd(0, 0);
 }
 
 int	main(int ac, char **av, char **env)
@@ -100,11 +98,9 @@ int	main(int ac, char **av, char **env)
 	t_master	control;
 	t_data		info;
 
-	using_history();
-	control.exit_status = 0;
 	out = 0;
-	control.old_pwd = getcwd(0, 0);
-	control.new_pwd = getcwd(0, 0);
+	using_history();
+	init_info(&info, &control);
 	initialize_env(&control, env);
 	while (control.exit_status != 1 && ac == 1 && av[0])
 	{
