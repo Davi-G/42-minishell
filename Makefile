@@ -17,7 +17,7 @@ SRCS = main.c \
 		command_finder.c \
 		execute_cmd.c \
 		existing_cmd.c \
-		signal \
+		signal.c \
 		error.c
 
 OBJS_DIR = ./obj/

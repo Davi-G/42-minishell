@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_1.c                                          :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 19:33:28 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 19:33:59 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/08 19:50:35 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ void	ctrl_c(int sig)
 {
 	(void)sig;
     ft_putstr("\n");
+	rl_redisplay();
     rl_on_new_line();
 	rl_replace_line("", 0);
-	rl_redisplay();
 }
 
 void	handle_eof(char *input)
