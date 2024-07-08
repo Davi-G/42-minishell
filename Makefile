@@ -16,7 +16,11 @@ SRCS = main.c \
 		utils1.c \
 		command_finder.c \
 		execute_cmd.c \
+		execute_cmd1.c \
 		existing_cmd.c \
+		existing_cmd1.c \
+		existing_cmd2.c \
+		existing_cmd3.c \
 		signal.c \
 		error.c
 
