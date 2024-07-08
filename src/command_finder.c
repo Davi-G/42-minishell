@@ -17,6 +17,11 @@
 
 int	exe_existing_command(t_data *command, t_master *info_shell, char **env)
 {
+	if (global_response != 0)
+	{
+		info_shell->cmd_response = global_response;
+		global_response = 0;
+	}
 	if (ft_strcmp(command->toke, "echo") == 0)
 		return (echo_cmd(info_shell, command));
 	else if (ft_strcmp(command->toke, "pwd") == 0)

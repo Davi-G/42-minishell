@@ -41,6 +41,54 @@ int	check_boolean(t_data *info)
 	return (1);
 }
 
+int	print_value(char *str, int i)
+{
+	int		j;
+	char	*get_env;
+	char	*aux;
+
+	j = 0;
+	while (str[i + j])
+		j++;
+	aux = ft_calloc(j + 1, sizeof(char *));
+	j = 0;
+	while (str[i] && str[i] != -36)
+	{
+		aux[j] = str[i];
+		i++;
+		j++;
+	}
+	get_env = getenv(aux);
+	if (get_env)
+		ft_printf("%s", get_env);
+	return (j - 2);
+}
+
+void	check_cases(t_master *info_shell, char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == -36 && !str[1])
+		write(1, "$", 1);
+	while (str[i])
+	{
+		if (str[i] == -36)
+		{
+			i++;
+			if (str[i] == 36)
+				write(1, "$$", 2);
+			else if (str[i] == '?')
+				ft_printf("%i", info_shell->cmd_response);
+			else
+				i += print_value(str, i) + 1;
+		}
+		else
+			ft_putchar_fd(str[i], 1);
+		i++;
+	}
+}
+
 int echo_cmd(t_master *info_shell, t_data *info)
 {
 	int n_boolean;
@@ -54,29 +102,26 @@ int echo_cmd(t_master *info_shell, t_data *info)
 	n_boolean = 0;
 	current = info->next;
 	n_boolean = check_boolean(current);
-	if (current && !current->next && n_boolean)
-        return (0);
+	if (current && n_boolean)
+	{
+		if (current->toke[0] && current->toke[0] == -36)
+			ft_putstr("$\n");
+		else if (current->toke[0])
+			ft_printf("%s\n", current->toke);
+	    return (0);
+	}
 	if (n_boolean)
 		current = current->next;
 	while (current)
 	{
-		if (current->toke)
-		{
-			if (ft_strcmp(current->toke, "$?") == 0)
-				ft_printf("%i", info_shell->exit_status);
-			else
-				ft_putstr(current->toke);
-		}
+		check_cases(info_shell, current->toke);
 		current = current->next;
 		write(1, " ", 1);
 	}
 	if (!n_boolean)
 		ft_putstr("\n");
 	else
-	{
-		ft_putstr("%");
-		ft_putstr("\n");
-	}
+		ft_putstr("%\n");
 	return (0);
 }
 
@@ -85,11 +130,14 @@ int	pwd_cmd(void)
 	char *cwd;
 
 	cwd = getcwd(0, 0);
+	if (!cwd)
+		return (1);
 	ft_putstr(cwd);
 	ft_putstr("\n");
 	free(cwd);
 	return (0);
 }
+
 int	exit_cmd(t_data *current, t_master *minishell)
 {
 	if (!(current->next) || current->next->type != 2)
@@ -105,9 +153,8 @@ int	exit_cmd(t_data *current, t_master *minishell)
 	else if (current->next && current->next->type == 2
 		&& is_numeric(current->next->toke) == 1)
 	{
-		//No debe salir normal con palabras (num 2). El exit dara codigo de 2, aunque saldrá
 		ft_putstr("minishell: exit: numeric argument required\n");
-		return (2);
+		return (255);
 	}
 	else if (current->next->type == 2)
 	{
@@ -115,28 +162,6 @@ int	exit_cmd(t_data *current, t_master *minishell)
 		return (ft_atoi(current->next->toke));
 	}
 	return (0);
-}
-
-void	initialize_env(t_master *info_shell, char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	info_shell->env = ft_calloc(i + 1, sizeof(char *));
-	if (!info_shell->env)
-	{
-		ft_putstr("Error: calloc fail\n");
-		info_shell->error = 1;
-		return ;
-	}
-	i = 0;
-	while (envp[i])
-	{
-		info_shell->env[i] = ft_strdup(envp[i]);
-		i++;
-	}
 }
 
 int	env_cmd(t_master *info_shell)
@@ -177,26 +202,7 @@ static void	actualize_env(t_master *info_shell)
 		i++;
 	}
 }
-/* 
-static int	try_prev_dir(t_master *info_shell, char *full_route)
-{
-	char *final_route;
-	int i;
 
-	i = ft_strlen(full_route);
-	while (full_route[i] != '/')
-		i--;
-	i++;
-	final_route = ft_calloc(i, sizeof(char));
-	ft_strlcpy(final_route, full_route, i);
-	if (chdir(final_route) == -1)
-	{
-		return (1);
-	}
-	actualize_env(info_shell);
-	return (0);
-}
-*/
 static int	try_change_dir(t_master *info_shell, char *route, char *pwd)
 {
 	if (chdir(route) == -1)
@@ -204,17 +210,13 @@ static int	try_change_dir(t_master *info_shell, char *route, char *pwd)
 		printf("cd: No such file or directory: %s\n", route);
 		return (1);
 	}
-	//free(info_shell->new_pwd);
-	//free(info_shell->old_pwd);
 	info_shell->new_pwd = getcwd(0, 0);
 	info_shell->old_pwd = ft_strdup(pwd);
 	free(pwd);
 	actualize_env(info_shell);
 	return (0);
 }
-//Si no hay nada, o el que hay detras es != 2 (ARG) -> chdir(getenv("HOME"));
-//Si si hay algo, hay que diferenciarlos
-//Si hay 2 argumentos tras el cd y los dos son arg, toomanyarguments
+
 int	cd_cmd(t_master *info_shell, t_data *current)
 {
 	char *aux;
@@ -224,9 +226,6 @@ int	cd_cmd(t_master *info_shell, t_data *current)
 		chdir(getenv("HOME"));
 	else if (current->next->type == 2 && ft_strcmp(current->next->toke, "-") == 0)
 	{
-		//El if esta porque si el directorio al que entra es el home, entonces imprime la virgulilla
-		//Si no, imprime el directorio al que entra
-		//Tambien habra que liberar aux, old_pwd (puesto que se iguala) y tambien new_pwd antes de igualarlo de nuevo
 		aux = getcwd(0, 0);
 		chdir(info_shell->old_pwd);
 		free(info_shell->old_pwd);
@@ -235,11 +234,7 @@ int	cd_cmd(t_master *info_shell, t_data *current)
 		info_shell->new_pwd = getcwd(0, 0);
 		free (aux);
 		actualize_env(info_shell);
-		if (ft_strcmp(info_shell->new_pwd, getenv("HOME")) != 0)
-			ft_printf("%s\n", info_shell->new_pwd);
-		else
-			ft_printf("%s\n", info_shell->new_pwd);
-			//ft_putstr("~");
+		ft_printf("%s\n", info_shell->new_pwd);
 	}
 	else if (!current->next->next)
 		return(try_change_dir(info_shell, current->next->toke, getcwd(0, 0)));
@@ -305,7 +300,6 @@ static void	*ft_realloc(void *ptr, size_t current_size, size_t new_size)
 		if (new_ptr)
 		{
 			ft_memcpy(new_ptr, ptr, current_size);
-			//free(ptr);
 		}
 		return (new_ptr);
 	}
@@ -368,10 +362,6 @@ char **add_env_var(t_master *info_shell, char *var)
     return (info_shell->env);
 }
 
-//El free_array comentado es por que lo se que se pasa no es una copia, sino la original
-//Quiero entender que si
-//En mi wsl cuando haces export de una variable (por ejemplo export hola) se genera hola=''
-//En este export no, falta probar que ocurre en 42
 void	export_cmd(t_master *info_shell, t_data *current)
 {
 	int 	i;
@@ -384,7 +374,6 @@ void	export_cmd(t_master *info_shell, t_data *current)
 		var = env_sorter(info_shell->env, 0, 0);
 		while (var[i])
 			ft_printf("declare -x %s\n", var[i++]);
-		//free_array(var);
 		return ;
 	}
 	while (current && current->toke)
@@ -425,6 +414,7 @@ void	delete_envp_single_var(t_master *info_shell, t_data *current)
 					info_shell->env[i] = info_shell->env[i + 1];
 					i++;
 				}
+				info_shell->exported_vars -= 1;
 				break;
 			}
 		}

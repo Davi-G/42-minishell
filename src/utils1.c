@@ -56,6 +56,7 @@ t_data	ft_clean_toke(t_master *info_shell, t_data *data)
 {
 	if (data->toke)
 		del_toke(data);
+	global_response = 0;
 	info_shell->error = 0;
 	data->quote = 0;
 	return (*data);

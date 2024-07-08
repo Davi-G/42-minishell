@@ -18,6 +18,7 @@ static void	initialize_env(t_master *info_shell, char **env)
 
 	i = 0;
 	info_shell->exported_vars = 0;
+	info_shell->cmd_response = 0;
 	while (env[i])
 		i++;
 	info_shell->env = ft_calloc(i + 1, sizeof(char *));
@@ -89,6 +90,7 @@ void	init_info(t_data *info, t_master *control)
 	control->exit_status = 0;
 	control->old_pwd = getcwd(0, 0);
 	control->new_pwd = getcwd(0, 0);
+	global_response = 0;
 }
 
 int	main(int ac, char **av, char **env)

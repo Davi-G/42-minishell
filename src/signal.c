@@ -14,11 +14,15 @@
 
 void	ctrl_c(int sig)
 {
-	(void)sig;
-    ft_putstr("\n");
-	rl_redisplay();
-    rl_on_new_line();
-	rl_replace_line("", 0);
+	if (sig == SIGINT)
+    {
+        global_response = 130;
+	    rl_redisplay();
+	    rl_on_new_line();
+	    rl_replace_line("", 0);
+        ft_putstr("\n");
+    }
+    return ;
 }
 
 void	handle_eof(char *input)

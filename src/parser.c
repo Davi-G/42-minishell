@@ -126,6 +126,7 @@ t_data	parser(char *str, t_master *info_shell)
 	char 	quote;
 
 	data = ft_clean_toke(info_shell, &data);
+	signal(SIGINT, &ctrl_c);
 	is_space(str, &data.i);
 	if (str[data.i] == '\0')
 		return (data);
