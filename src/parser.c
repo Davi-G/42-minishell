@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/09 12:25:18 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/07/09 13:03:45 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ t_data	*next_toke(t_data *data, char *str)
 	char	c;
 
 	c = ' ';
-	data->j = 0;
 	new = malloc(sizeof(t_data));
 	new->toke = calloc(count_space(str, data), sizeof(char));
 	if (!new || !new->toke)
@@ -105,6 +104,7 @@ t_data	set_toke(t_data *data, char *str)
 	while (str[data->i])
 	{
 		sep = is_ignore(str, data->i);
+		data->j = 0;
 		next = next_toke(data, str);
 		next->prev = prev;
 		if (prev)
@@ -126,7 +126,6 @@ t_data	parser(char *str, t_master *info_shell)
 	char 	quote;
 
 	data = ft_clean_toke(info_shell, &data);
-	//signal(SIGINT, ctrl_c);
 	is_space(str, &data.i);
 	if (str[data.i] == '\0')
 		return (data);
@@ -137,6 +136,7 @@ t_data	parser(char *str, t_master *info_shell)
 	data.quote = quote;
 	if (data.quote != 0)
 		info_shell->error = 1;
-	//print_tokens(&data);
 	return (data);
 }
+
+	//print_tokens(&data);

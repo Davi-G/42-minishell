@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 19:35:13 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 19:37:29 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/09 13:02:08 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	print_tokens(t_data *data)
 
 t_data	ft_clean_toke(t_master *info_shell, t_data *data)
 {
+	while (data->toke && data->prev){
+		data = data->prev;}
 	if (data->toke)
 		del_toke(data);
 	global_response = 0;
@@ -70,7 +72,6 @@ void	del_toke(t_data *data)
 	{
 		aux = data->next;
 		free(data->toke);
-	//	free(data);
 		data = aux;
 	}
 }
