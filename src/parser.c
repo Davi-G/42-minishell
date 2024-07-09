@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:06:52 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 19:40:37 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/09 12:25:18 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ t_data	parser(char *str, t_master *info_shell)
 	char 	quote;
 
 	data = ft_clean_toke(info_shell, &data);
-	signal(SIGINT, &ctrl_c);
+	//signal(SIGINT, ctrl_c);
 	is_space(str, &data.i);
 	if (str[data.i] == '\0')
 		return (data);

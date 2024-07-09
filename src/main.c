@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: davi-g <davi-g@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/08 19:42:42 by davi-g           ###   ########.fr       */
+/*   Updated: 2024/07/09 12:26:04 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	global_response;
 
 static void	initialize_env(t_master *info_shell, char **env)
 {
@@ -78,6 +80,7 @@ static char *set_home(char *home)
 
 void	init_info(t_data *info, t_master *control)
 {
+	signal(SIGINT, ctrl_c);
 	info->toke = NULL;
 	info->type = 0;
 	info->next = NULL;
@@ -106,7 +109,6 @@ int	main(int ac, char **av, char **env)
 	initialize_env(&control, env);
 	while (control.exit_status != 1 && ac == 1 && av[0])
 	{
-		signal(SIGINT, ctrl_c);
 		home = set_home(home);
 		out = readline(home);
 		handle_eof(out);
