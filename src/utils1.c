@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 19:35:13 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/09 13:02:08 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/07/09 15:51:42 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,5 @@ void	del_toke(t_data *data)
 		free(data->toke);
 		data = aux;
 	}
+	free(data);
 }

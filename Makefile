@@ -14,6 +14,7 @@ SRCS = main.c \
 		parser1.c \
 		utils.c \
 		utils1.c \
+		utils2.c \
 		command_finder.c \
 		execute_cmd.c \
 		execute_cmd1.c \

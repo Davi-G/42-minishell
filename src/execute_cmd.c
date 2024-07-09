@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:39:50 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/09 12:23:16 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/07/09 18:03:22 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ char *path_finder(char *command, char **env)
 
 	i = 0;
 	result = NULL;
+    if (ft_strchr(command, '/'))
+        return (ft_strdup(command));
     while (env[i])
 	{
         if (ft_strncmp(env[i], "PATH=", 5) == 0)
@@ -81,34 +83,6 @@ char **unitary_command(t_data *cmd)
 	return (unitary_cmd);
 }
 
-/* void	execve_cmd(t_master *info_shell, t_data *cmd, char **env)
-{
-	char *path;
-	char **unitary_cmd;
-
-	(void)info_shell;
-	path = path_finder(cmd->toke, env);
-	unitary_cmd = unitary_command(cmd);
-	printf("path: %s\n", path);
-	if (path == NULL)
-	{
-		ft_putstr("minishell: command not found\n");
-		exit(127);
-	}
-	while (unitary_cmd)
-	{
-		ft_putstr(*unitary_cmd);
-		unitary_cmd++;
-	}
-	if (execve(path, unitary_cmd, env) == -1)
-	{
-		ft_putstr("minishell: command not found\n");
-		exit(127);
-	}
-	free_array(unitary_cmd);
-	free(path);
-} */
-
 void exe_cmd(t_master *info_shell, t_data *command, char **env)
 {
     char	*path;
@@ -119,8 +93,8 @@ void exe_cmd(t_master *info_shell, t_data *command, char **env)
     unitary_cmd = unitary_command(command);
 	if (path == NULL)
     {
-        ft_putstr("minishell: command not found\n");
-        info_shell->exit_status = 127;
+		ft_printf("minishell: command not found: %s\n", unitary_cmd[0]);
+        info_shell->cmd_response = 127;
 		return ;
     }
 	pid = fork();
@@ -128,8 +102,8 @@ void exe_cmd(t_master *info_shell, t_data *command, char **env)
 	{
 		if (execve(path, unitary_cmd, env) == -1)
 		{
-			ft_putstr("minishell: command not found\n");
-			info_shell->exit_status = 127;
+			ft_printf("minishell: command not found: %s\n", unitary_cmd[0]);
+			info_shell->cmd_response = 127;
 		}
 	}
 	else
@@ -140,10 +114,12 @@ void exe_cmd(t_master *info_shell, t_data *command, char **env)
 
 void execute_pipeline(t_master *info_shell, t_data *cmd)
 {
-    int in_fd = 0;
+    int in_fd;
     int fd[2];
-    t_data *current_cmd = cmd;
+    t_data *current_cmd;
 
+    in_fd = 0;
+	current_cmd = cmd;
     while (current_cmd)
     {
         pipe(fd);
@@ -153,18 +129,15 @@ void execute_pipeline(t_master *info_shell, t_data *cmd)
             if (current_cmd->next && current_cmd->next->type == PIPE)
                 dup2(fd[1], STDOUT_FILENO);
             close(fd[0]);
-            exe_existing_command(current_cmd, info_shell, info_shell->env);
+            if (current_cmd->toke != NULL && current_cmd->type == CMD)  
+                exe_existing_command(current_cmd, info_shell, info_shell->env);
             exit(EXIT_FAILURE);
         }
-        else
-        {
-            wait(NULL);
-            close(fd[1]);
-            in_fd = fd[0];
-            while (current_cmd && current_cmd->type != PIPE)
-                current_cmd = current_cmd->next;
-            if (current_cmd)
-                current_cmd = current_cmd->next;
-        }
+        wait(NULL);
+        close(fd[1]);
+        if (in_fd != 0)
+            close(in_fd);
+        in_fd = fd[0];
+        current_cmd = current_cmd->next;
     }
 }

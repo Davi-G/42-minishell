@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:00:36 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/09 12:26:04 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/07/09 16:21:37 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,33 +37,7 @@ static void	initialize_env(t_master *info_shell, char **env)
 	}
 }
 
-static char	*home_finder(char *old_pwd, char *home)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	home = NULL;
-	while (old_pwd[i])
-		i++;
-	j = i;
-	while (old_pwd[i] != '/')
-		i--;
-	i++;
-	home = malloc(sizeof(char) * (j - i));
-	j = 0;
-	while (old_pwd[i])
-	{
-		home[j] = old_pwd[i];
-		i++;
-		j++;
-	}
-	home[j] = '/';
-	home[j + 1] = '\0';
-	return (home);
-}
-
-static char *set_home(char *home)
+char *set_home(char *home)
 {
 	char	*aux;
 
@@ -119,7 +93,8 @@ int	main(int ac, char **av, char **env)
 		if (control.error == 0 && info.toke)
 			while_commands(&control, &info);
 		else
-			error(&control);
+			error(&control, &info);
 	}
+	free_all(&control, &info);
 	return (0);
 }

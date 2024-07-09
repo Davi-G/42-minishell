@@ -18,7 +18,6 @@
 //actualmente "funciona"
 //mete un salto de linea por la cara
 //si el $?esta en medio deuna palabra no funciona jajajaj salu2
-
 int	check_boolean(t_data *info)
 {
 	t_data *current;
@@ -41,7 +40,33 @@ int	check_boolean(t_data *info)
 	return (1);
 }
 
-int	print_value(char *str, int i)
+void	exported_var_finder(t_master *info_shell, char *aux)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	while (info_shell->env[i])
+	{
+		j = ft_strlen_until(info_shell->env[i], '=');
+		if (ft_strncmp(info_shell->env[i], aux, j) == 0)
+		{
+			k = j + 1;
+			while (info_shell->env[i][k])
+			{
+				ft_putchar_fd(info_shell->env[i][k], 1);
+				k++;
+			}
+			break ;
+		}
+		i++;
+	}
+}
+
+int	print_value(t_master *info_shell, char *str, int i)
 {
 	int		j;
 	char	*get_env;
@@ -61,6 +86,8 @@ int	print_value(char *str, int i)
 	get_env = getenv(aux);
 	if (get_env)
 		ft_printf("%s", get_env);
+	else
+		exported_var_finder(info_shell, aux);
 	return (j - 2);
 }
 
@@ -81,7 +108,7 @@ void	check_cases(t_master *info_shell, char *str)
 			else if (str[i] == '?')
 				ft_printf("%i", info_shell->cmd_response);
 			else
-				i += print_value(str, i) + 1;
+				i += print_value(info_shell, str, i) + 1;
 		}
 		else
 			ft_putchar_fd(str[i], 1);
@@ -89,10 +116,19 @@ void	check_cases(t_master *info_shell, char *str)
 	}
 }
 
+int	single_char_chase(t_data *current)
+{
+	if (current->toke[0] && current->toke[0] == -36)
+		ft_putstr("$\n");
+	else if (current->toke[0] && !current->toke[1])
+		ft_printf("%s\n", current->toke);
+	return (0);
+}
+
 int echo_cmd(t_master *info_shell, t_data *info)
 {
-	int n_boolean;
-	t_data *current;
+	int		n_boolean;
+	t_data	*current;
 
 	if (!info || !info->next)
 	{
@@ -102,26 +138,20 @@ int echo_cmd(t_master *info_shell, t_data *info)
 	n_boolean = 0;
 	current = info->next;
 	n_boolean = check_boolean(current);
-	if (current && n_boolean)
-	{
-		if (current->toke[0] && current->toke[0] == -36)
-			ft_putstr("$\n");
-		else if (current->toke[0])
-			ft_printf("%s\n", current->toke);
-	    return (0);
-	}
+	if (current && !current->next && !current->toke[1])
+		return (single_char_chase(current));
 	if (n_boolean)
 		current = current->next;
-	while (current)
+	while (current && current->type == ARG)
 	{
 		check_cases(info_shell, current->toke);
 		current = current->next;
-		write(1, " ", 1);
+		if (current)
+			write(1, " ", 1);
 	}
-	if (!n_boolean)
-		ft_putstr("\n");
-	else
-		ft_putstr("%\n");
+	if (n_boolean)
+		ft_putstr("%");
+	ft_putstr("\n");
 	return (0);
 }
 

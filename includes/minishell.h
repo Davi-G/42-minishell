@@ -6,7 +6,7 @@
 /*   By: dagomez <dagomez@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 19:48:49 by davi-g            #+#    #+#             */
-/*   Updated: 2024/07/09 12:24:00 by dagomez          ###   ########.fr       */
+/*   Updated: 2024/07/09 18:05:45 by dagomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int		ft_strlen_array(char **array);
 char	*path_finder(char *cmd, char **env);
 void	exe_cmd(t_master *info_shell, t_data *command, char **env);
 int		ft_strlen_array_full(char **array);
-void	error(t_master *info_shell);
+void   error(t_master *info_shell, t_data *data);
 char	**unitary_command(t_data *info);
 int		is_ignore(char *str, int i);
 t_data	set_toke(t_data *data, char *str);
@@ -120,7 +120,7 @@ void execute_pipeline(t_master *info_shell, t_data *cmd);
 void handle_redirection(t_data *cmd);
 void	while_commands(t_master *info_shell, t_data *cmd);
 int	check_boolean(t_data *info);
-int	print_value(char *str, int i);
+int	print_value(t_master *info_shell, char *str, int i);
 void	check_cases(t_master *info_shell, char *str);
 int echo_cmd(t_master *info_shell, t_data *info);
 int	pwd_cmd(void);
@@ -138,6 +138,9 @@ int	env_cmd(t_master *info_shell);
 void	actualize_env(t_master *info_shell);
 int	try_change_dir(t_master *info_shell, char *route, char *pwd);
 int	cd_cmd(t_master *info_shell, t_data *current);
+void	free_all(t_master *info_shell, t_data *data);
+char	*home_finder(char *old_pwd, char *home);
+char *set_home(char *home);
 
 extern int global_response;
 #endif 
